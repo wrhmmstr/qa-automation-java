@@ -17,7 +17,7 @@ public class TimestampMessageDecorator {
      * Побочные эффекты пока отсутствуют.
      *
      * @param message   Строка (переменная типа String) с сообщением для вывода
-     * @return          Строка с декорированным сообщением из текущего времени, проблеа и сообщения message
+     * @return          Строка с декорированным сообщением из текущего времени, пробела и сообщения message
      * @see             TimestampMessageDecorator Родительский класс
      */
     public static String decorate(String message){
