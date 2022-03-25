@@ -1,3 +1,5 @@
+package com.tcs.edu.printer;
+
 /**
  * Вывод информации в консоль
  *
