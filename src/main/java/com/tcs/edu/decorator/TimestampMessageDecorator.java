@@ -12,6 +12,8 @@ import java.time.Instant;
  */
 
 public class TimestampMessageDecorator {
+    public static int messageCount = 0;
+
     /**
      * Метод добавляет к текущему времени сообщение через пробел с помощью конкатенации.
      * Побочные эффекты пока отсутствуют.
