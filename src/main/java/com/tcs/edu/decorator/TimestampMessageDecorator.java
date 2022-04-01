@@ -12,6 +12,9 @@ import java.time.Instant;
  */
 
 public class TimestampMessageDecorator {
+    /**
+     * Общая переменная с количеством выведенных сообщений
+     */
     public static int messageCount = 0;
 
     /**
