@@ -1,6 +1,6 @@
 package com.tcs.edu.printer;
 
-import com.tcs.edu.decorator.TimestampMessageDecorator;
+//import com.tcs.edu.decorator.TimestampMessageDecorator;
 
 /**
  * Вывод информации в консоль
@@ -18,6 +18,7 @@ public class ConsolePrinter {
      * @see             ConsolePrinter Родительский класс
      */
     public static void print(String message) {
-        System.out.println(++TimestampMessageDecorator.messageCount + " " + message);
+        //System.out.println(++TimestampMessageDecorator.messageCount + " " + message);
+        System.out.println(message);
     }
 }

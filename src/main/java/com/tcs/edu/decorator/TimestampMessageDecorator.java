@@ -15,7 +15,7 @@ public class TimestampMessageDecorator {
     /**
      * Общая переменная с количеством выведенных сообщений
      */
-    public static int messageCount = 0;
+    private static int messageCount = 0;
 
     /**
      * Метод добавляет к текущему времени сообщение через пробел с помощью конкатенации.
@@ -26,7 +26,8 @@ public class TimestampMessageDecorator {
      * @see             TimestampMessageDecorator Родительский класс
      */
     public static String decorate(String message){
-        final var decoratedMessage = Instant.now() + " " + message;
+        //String message = String.format();
+        final var decoratedMessage = ++messageCount + " " + Instant.now() + " " + message;
         return decoratedMessage;
     }
 }
