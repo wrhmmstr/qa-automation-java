@@ -6,7 +6,7 @@ import com.tcs.edu.randomizer.ConsoleOutputRandomizer;
 
 class Application {
     public static void main(String[] args) {
-        for (int i = 0; i < ConsoleOutputRandomizer.randomize(2, 5); ++i){
+        for (int i = 0; i < ConsoleOutputRandomizer.randomize(4, 8); ++i){
             ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello world!"));
         }
     }

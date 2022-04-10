@@ -17,6 +17,8 @@ public class TimestampMessageDecorator {
      */
     private static int messageCount = 0;
 
+    public static int PAGE_SIZE = 2;
+
     /**
      * Метод добавляет к текущему времени сообщение через пробел с помощью конкатенации.
      * Побочные эффекты пока отсутствуют.
@@ -26,7 +28,13 @@ public class TimestampMessageDecorator {
      * @see             TimestampMessageDecorator Родительский класс
      */
     public static String decorate(String message){
-        final var decoratedMessage = String.format("%d %s %s", ++messageCount, Instant.now().toString(), message);
-        return decoratedMessage;
+        ++messageCount;
+        if (messageCount % PAGE_SIZE == 0) {
+            final var decoratedMessage = String.format("%d %s %s %n---", messageCount, Instant.now().toString(), message);
+            return decoratedMessage;
+        } else {
+            final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message);
+            return decoratedMessage;
+        }
     }
 }
