@@ -12,7 +12,6 @@ package com.tcs.edu.printer;
 public class ConsolePrinter {
     /**
      * Метод выводит в консоль порядковый номер переданной строки, содержимое строки, и переходит на новую строку.
-     * Побочный эффект изменение глобальной переменной messageCount / Side effect on global messageCount
      *
      * @param message   Строка (переменная типа String) для вывода
      * @see             ConsolePrinter Родительский класс

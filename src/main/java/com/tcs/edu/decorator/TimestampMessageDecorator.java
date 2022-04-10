@@ -13,10 +13,12 @@ import java.time.Instant;
 
 public class TimestampMessageDecorator {
     /**
-     * Общая переменная с количеством выведенных сообщений
+     * Переменная с количеством выведенных сообщений
      */
     private static int messageCount = 0;
-
+    /**
+     * Переменная с количеством строк на одной странице
+     */
     public static int PAGE_SIZE = 2;
 
     /**
