@@ -19,7 +19,7 @@ public class TimestampMessageDecorator {
     /**
      * Переменная с количеством строк на одной странице
      */
-    public static int PAGE_SIZE = 2;
+    public static int PAGE_SIZE = 2; //TODO передавать значение размера страницы из класса Application
 
     /**
      * Метод добавляет к текущему времени сообщение через пробел с помощью конкатенации.
