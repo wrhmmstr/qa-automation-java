@@ -8,7 +8,7 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
  *
  * @author  t.m.kharchenko
- * @see     #processMessage(Severity, String)  Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
+ * @see     #processMessage(Severity, String...)  Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
  */
 public class MessageService {
     /**
@@ -17,13 +17,12 @@ public class MessageService {
      * Побочные эффекты пока отсутствуют.
      *
      * @param level     Перечислимый тип (переменная типа Severity) с уровнем важности сообщения
-     * @param message   Строка (переменная типа String) с сообщением для декорирования
+     * @param messages  Массив строк (String varargs) с сообщением для декорирования
      * @see             MessageService Родительский класс
      */
-    public static void processMessage (Severity level, String message) {
-        final String TimestampDecoratedMessage = decorate(message);
-        final String SeverityDecoratedString = mapToString(level);
-        final String PagingDecoratedString = messageToPage(messageCount);
-        print(String.format("%s %s %s", TimestampDecoratedMessage, SeverityDecoratedString, PagingDecoratedString));
+    public static void processMessage (Severity level, String... messages) {
+        for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
+            print(String.format("%s %s %s", decorate(messages[currentMessage]), mapToString(level), messageToPage(messageCount)));
+        }
     }
 }
