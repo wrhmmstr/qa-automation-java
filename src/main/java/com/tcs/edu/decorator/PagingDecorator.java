@@ -1,6 +1,6 @@
 package com.tcs.edu.decorator;
 
-public class PagingMessageDecorator {
+public class PagingDecorator {
     /**
      * Переменная с количеством строк на одной странице
      */
@@ -11,7 +11,7 @@ public class PagingMessageDecorator {
      *
      * @param messageCount  Число (переменная типа int) c порядковым номером выводимой строки
      * @return              Строка c разделителем страницы
-     * @see                 PagingMessageDecorator Родительский класс
+     * @see                 PagingDecorator Родительский класс
      */
     public static String messageToPage(int messageCount){
 
