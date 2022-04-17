@@ -1,5 +1,10 @@
 package com.tcs.edu.decorator;
-
+/**
+ * Добавление разделителя страницы
+ *
+ * @author  t.m.kharchenko
+ * @see     #messageToPage(int) Метод для добавления разделителя страницы после строки кратной PAGE_SIZE
+ */
 public class PagingDecorator {
     /**
      * Переменная с количеством строк на одной странице

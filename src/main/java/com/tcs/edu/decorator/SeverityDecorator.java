@@ -1,5 +1,10 @@
 package com.tcs.edu.decorator;
-
+/**
+ * Преобразование перечислимого типа в строку
+ *
+ * @author  t.m.kharchenko
+ * @see     #mapToString(Severity) Метод для преобразования перечислимого типа в строку
+ */
 public class SeverityDecorator {
     /**
      * Метод преобразует перечислимый тип в строку
