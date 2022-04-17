@@ -1,7 +1,5 @@
 package com.tcs.edu.decorator;
 
-import com.tcs.edu.printer.ConsolePrinter;
-
 import java.time.Instant;
 
 /**
@@ -15,14 +13,9 @@ public class TimestampMessageDecorator {
     /**
      * Переменная с количеством выведенных сообщений
      */
-    private static int messageCount = 0;
+    public static int messageCount = 0;
     /**
-     * Переменная с количеством строк на одной странице
-     */
-    public static int PAGE_SIZE = 2; //TODO передавать значение размера страницы из класса Application
-
-    /**
-     * Метод добавляет к текущему времени сообщение через пробел с помощью конкатенации.
+     * Метод добавляет порядковый номер и текущее время к сообщению через пробел с помощью форматирования.
      * Побочные эффекты пока отсутствуют.
      *
      * @param message   Строка (переменная типа String) с сообщением для вывода
@@ -31,12 +24,7 @@ public class TimestampMessageDecorator {
      */
     public static String decorate(String message){
         ++messageCount;
-        if (messageCount % PAGE_SIZE == 0) {
-            final var decoratedMessage = String.format("%d %s %s %n---", messageCount, Instant.now().toString(), message);
-            return decoratedMessage;
-        } else {
-            final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message);
-            return decoratedMessage;
-        }
+        final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message);
+        return decoratedMessage;
     }
 }
