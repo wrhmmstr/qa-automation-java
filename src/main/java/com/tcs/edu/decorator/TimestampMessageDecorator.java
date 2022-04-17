@@ -13,9 +13,13 @@ import java.time.Instant;
 
 public class TimestampMessageDecorator {
     /**
-     * Общая переменная с количеством выведенных сообщений
+     * Переменная с количеством выведенных сообщений
      */
-    public static int messageCount = 0;
+    private static int messageCount = 0;
+    /**
+     * Переменная с количеством строк на одной странице
+     */
+    public static int PAGE_SIZE = 2; //TODO передавать значение размера страницы из класса Application
 
     /**
      * Метод добавляет к текущему времени сообщение через пробел с помощью конкатенации.
@@ -26,7 +30,13 @@ public class TimestampMessageDecorator {
      * @see             TimestampMessageDecorator Родительский класс
      */
     public static String decorate(String message){
-        final var decoratedMessage = Instant.now() + " " + message;
-        return decoratedMessage;
+        ++messageCount;
+        if (messageCount % PAGE_SIZE == 0) {
+            final var decoratedMessage = String.format("%d %s %s %n---", messageCount, Instant.now().toString(), message);
+            return decoratedMessage;
+        } else {
+            final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message);
+            return decoratedMessage;
+        }
     }
 }
