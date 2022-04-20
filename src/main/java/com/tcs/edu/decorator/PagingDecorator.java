@@ -9,7 +9,7 @@ public class PagingDecorator {
     /**
      * Переменная с количеством строк на одной странице
      */
-    public static int PAGE_SIZE = 2; //TODO передавать значение размера страницы из класса Application
+    private static final int PAGE_SIZE = 2; //TODO передавать значение размера страницы из класса Application
     /**
      * Метод добавляет разделитель страницы после строки кратной PAGE_SIZE
      * Побочные эффекты пока отсутствуют.
