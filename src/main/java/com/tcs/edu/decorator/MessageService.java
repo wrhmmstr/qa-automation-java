@@ -30,6 +30,15 @@ public class MessageService {
                     print(String.format("%s %s %s", decorate(messages[currentMessage]), mapToString(level), messageToPage(messageCount)));
                 } else ;
             }
-        } else;
-    }
+        } else {
+            if (message != null) {
+                print(String.format("%s %s", decorate(message), messageToPage(messageCount)));
+            } else ;
+            for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
+                if (messages[currentMessage] != null) {
+                    print(String.format("%s %s", decorate(messages[currentMessage]), messageToPage(messageCount)));
+                } else ;
+            }
+        }
+    };
 }
