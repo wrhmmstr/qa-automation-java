@@ -21,9 +21,15 @@ public class MessageService {
      * @see             MessageService Родительский класс
      */
     public static void processMessage (Severity level, String message, String... messages) {
-        print(String.format("%s %s %s", decorate(message), mapToString(level), messageToPage(messageCount)));
-        for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
-            print(String.format("%s %s %s", decorate(messages[currentMessage]), mapToString(level), messageToPage(messageCount)));
-        }
+        if (level != null) {
+            if (message != null) {
+                print(String.format("%s %s %s", decorate(message), mapToString(level), messageToPage(messageCount)));
+            } else ;
+            for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
+                if (messages[currentMessage] != null) {
+                    print(String.format("%s %s %s", decorate(messages[currentMessage]), mapToString(level), messageToPage(messageCount)));
+                } else ;
+            }
+        } else;
     }
 }

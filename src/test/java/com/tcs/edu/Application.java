@@ -10,11 +10,18 @@ class Application {
         /*for (int i = 0; i < ConsoleOutputRandomizer.randomize(4, 8); ++i){
             MessageService.processMessage(EnumRandomizer.randomize(), "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
         }*/
-        MessageService.processMessage(Severity.MINOR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
+        /*MessageService.processMessage(Severity.MINOR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
         MessageService.processMessage(Severity.REGULAR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
         MessageService.processMessage(Severity.REGULAR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
         MessageService.processMessage(Severity.MAJOR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
         MessageService.processMessage(Severity.MINOR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
-        MessageService.processMessage(Severity.MAJOR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
+        MessageService.processMessage(Severity.MAJOR, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");*/
+        MessageService.processMessage(Severity.MINOR, null, "Ciao mondo!", "¡Hola Mundo!");
+        MessageService.processMessage(Severity.REGULAR, "Hello world!", null, "¡Hola Mundo!");
+        MessageService.processMessage(Severity.REGULAR, "Hello world!", "Ciao mondo!", null);
+        MessageService.processMessage(null, "Hello world!", "Ciao mondo!", "¡Hola Mundo!");
+        MessageService.processMessage(Severity.MINOR, null, null, "¡Hola Mundo!");
+        MessageService.processMessage(null, null, null, null);
+
     }
 }
