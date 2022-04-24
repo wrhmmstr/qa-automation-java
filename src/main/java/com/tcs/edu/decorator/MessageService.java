@@ -10,6 +10,8 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
  * @author  t.m.kharchenko
  * @see     #processMessage(Severity, String) Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
  * @see     #processMessages(Severity, String, String...) Метод для преобразования декорированных сообщений по примеру processMessage
+ * @see     #processMessages(Severity, MessageOrder, String, String...) Перегруженный метод для преобразования декорированных сообщений
+ * по примеру processMessage, с возможностью обратной сортировки по последовательности vararg.
  */
 public class MessageService {
     /**
@@ -31,7 +33,6 @@ public class MessageService {
             }
         } else ;
     }
-
     /**
      * Метод преобразует декорированные сообщения по примеру processMessage
      * Побочные эффекты пока отсутствуют.
@@ -45,6 +46,33 @@ public class MessageService {
         processMessage(level, message);
         for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
             processMessage(level, messages[currentMessage]);
+        }
+    }
+    /**
+     * Перегруженный метод преобразует декорированные сообщения по примеру processMessage,
+     * с возможностью обратной сортировки по последовательности vararg.
+     * Побочные эффекты пока отсутствуют.
+     *
+     * @param level     Перечислимый тип (переменная типа Severity) с уровнем важности сообщения
+     * @param order     Перечислимый тип (переменная типа MessageOrder) с порядком сортировки последовательности vararg
+     * @param message   Строка (String) с сообщением для декорирования
+     * @param messages  Массив строк (String varargs) с сообщениями для декорирования
+     * @see             MessageService Родительский класс
+     */
+    public static void processMessages (Severity level, MessageOrder order, String message, String... messages) {
+        switch (order) {
+            case ASC: {
+                processMessage(level, message);
+                for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
+                    processMessage(level, messages[currentMessage]);
+                }
+            }
+            case DESC: {
+                for (int currentMessage = messages.length-1; currentMessage >= 0; currentMessage--) {
+                    processMessage(level, messages[currentMessage]);
+                }
+                processMessage(level, message);
+            }
         }
     }
 }
