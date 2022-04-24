@@ -8,37 +8,43 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
  *
  * @author  t.m.kharchenko
- * @see     #processMessage(Severity, String, String...)   Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
+ * @see     #processMessage(Severity, String) Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
+ * @see     #processMessages(Severity, String, String...) Метод для преобразования декорированных сообщений по примеру processMessage
  */
 public class MessageService {
     /**
-     * Метод преобразует декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль
+     * Метод преобразует непустое декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль
      * и выводит полученную строку на печать.
+     * Если сообщение пустое, то преобразование не происходит. Если уровень важности пустой, то не участвует в преобразовании.
      * Побочные эффекты пока отсутствуют.
      *
      * @param level     Перечислимый тип (переменная типа Severity) с уровнем важности сообщения
-     * @param messages  Массив строк (String varargs) с сообщением для декорирования
+     * @param message   Строка (String) с сообщением для декорирования
      * @see             MessageService Родительский класс
      */
-    public static void processMessage (Severity level, String message, String... messages) {
-        if (level != null) {
-            if (message != null) {
+    public static void processMessage (Severity level, String message) {
+        if (message != null) {
+            if (level != null) {
                 print(String.format("%s %s %s", decorate(message), mapToString(level), messageToPage(messageCount)));
-            } else ;
-            for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
-                if (messages[currentMessage] != null) {
-                    print(String.format("%s %s %s", decorate(messages[currentMessage]), mapToString(level), messageToPage(messageCount)));
-                } else ;
-            }
-        } else {
-            if (message != null) {
+            } else {
                 print(String.format("%s %s", decorate(message), messageToPage(messageCount)));
-            } else ;
-            for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
-                if (messages[currentMessage] != null) {
-                    print(String.format("%s %s", decorate(messages[currentMessage]), messageToPage(messageCount)));
-                } else ;
             }
+        } else ;
+    }
+
+    /**
+     * Метод преобразует декорированные сообщения по примеру processMessage
+     * Побочные эффекты пока отсутствуют.
+     *
+     * @param level     Перечислимый тип (переменная типа Severity) с уровнем важности сообщения
+     * @param message   Строка (String) с сообщением для декорирования
+     * @param messages  Массив строк (String varargs) с сообщениями для декорирования
+     * @see             MessageService Родительский класс
+     */
+    public static void processMessages (Severity level, String message, String... messages) {
+        processMessage(level, message);
+        for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
+            processMessage(level, messages[currentMessage]);
         }
-    };
+    }
 }
