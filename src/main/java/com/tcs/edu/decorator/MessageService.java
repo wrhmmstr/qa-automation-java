@@ -88,7 +88,7 @@ public class MessageService {
      *
      * @param level    Перечислимый тип (переменная типа Severity) с уровнем важности сообщения
      * @param order    Перечислимый тип (переменная типа MessageOrder) с порядком сортировки последовательности vararg
-     * @param doubling Перечислимый тип (переменная типа Doubling) с признаком удаления дублей
+     * @param doubling Перечислимый тип (переменная типа Doubling) с признаком наличия дублей
      * @param message  Строка (String) с сообщением для декорирования
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
      * @see MessageService Родительский класс
@@ -100,30 +100,66 @@ public class MessageService {
                 break;
             }
             case DISTINCT: {
-                String[] printedMessages = new String[messages.length+1];
                 //условие задачи "по размеру равным длине последовательности vararg" нарушенно намеренно
                 //+ комментарий от преподавателя:
                 // "Не допускать при выводе дублей из всего множества входных параметров – сообщений.
                 //То есть на вход могут быть дубли сообщений в множестве String message + String… messages."
-                processMessage(level, message);
-                int printedWritedMessage = 0;
-                printedMessages[printedWritedMessage] = message;
-                for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
-                    boolean isPrinted = false;
-                    for (int printedMessage = 0; printedMessage < printedMessages.length; printedMessage++) {
-                        if (Objects.equals(messages[currentMessage], printedMessages[printedMessage])) {
-                            isPrinted = true;
-                            break;
+                //в случае когда все сообщения будут непустыми в массиве нужно место для String message + String… messages.
+                String[] printedMessages = new String[messages.length + 1];
+                switch (order) {
+                    case ASC: {
+                        processMessage(level, message);
+                        int printedWritedMessage = 0;
+                        printedMessages[printedWritedMessage] = message;
+                        for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
+                            boolean isPrinted = false;
+                            for (int printedMessage = 0; printedMessage < printedMessages.length; printedMessage++) {
+                                if (Objects.equals(messages[currentMessage], printedMessages[printedMessage])) {
+                                    isPrinted = true;
+                                    break;
+                                }
+                            }
+                            if (messages[currentMessage] != null && !isPrinted) {
+                                processMessage(level, messages[currentMessage]);
+                                ++printedWritedMessage;
+                                printedMessages[printedWritedMessage] = messages[currentMessage];
+                            }
                         }
-                    } if (messages[currentMessage] != null && !isPrinted) {
-                            processMessage(level, messages[currentMessage]);
-                        //processMessages(level, order, null, printedMessages);
-                            ++printedWritedMessage;
-                            printedMessages[printedWritedMessage] = messages[currentMessage];
+                        break;
+                    }
+                    case DESC: {
+                        int printedWritedMessage = 0;
+                        for (int currentMessage = messages.length-1; currentMessage >= 0; currentMessage--) {
+                            boolean isPrinted = false;
+                            for (int printedMessage = 0; printedMessage < printedMessages.length; printedMessage++) {
+                                if (Objects.equals(messages[currentMessage], printedMessages[printedMessage])) {
+                                    isPrinted = true;
+                                    break;
+                                }
+                            }
+                            if (messages[currentMessage] != null && !isPrinted) {
+                                processMessage(level, messages[currentMessage]);
+                                ++printedWritedMessage;
+                                printedMessages[printedWritedMessage] = messages[currentMessage];
+                            }
                         }
+                        boolean isPrinted = false;
+                        for (int printedMessage = 0; printedMessage < printedMessages.length; printedMessage++) {
+                            if (Objects.equals(message, printedMessages[printedMessage])) {
+                                isPrinted = true;
+                                break;
+                            }
+                        }
+                        if (message != null && !isPrinted) {
+                            processMessage(level, message);
+                            //++printedWritedMessage;
+                            printedMessages[printedMessages.length-1] = message;
+                        }
+                        break;
                     }
                 }
-                break;
             }
+            break;
         }
     }
+}

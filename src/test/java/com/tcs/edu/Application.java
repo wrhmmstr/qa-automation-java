@@ -27,6 +27,7 @@ class Application {
         processMessages(null, MessageOrder.DESC, null, null, null, "Hallo Welt! 4");*/
 
         //для проверки домашнего задания 7-1, 7-2 и 7-3:
+        processMessages(Severity.REGULAR, MessageOrder.ASC, Doubling.DISTINCT, "Hello world!", null, "Hello world!", "Ciao mondo!", "¡Hola Mundo!", "Hallo Welt!");
         processMessages(Severity.REGULAR, MessageOrder.DESC, Doubling.DISTINCT, "Hello world!", null, "Hello world!", "Ciao mondo!", "¡Hola Mundo!", "Hallo Welt!");
 
 
