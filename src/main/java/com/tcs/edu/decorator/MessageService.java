@@ -119,7 +119,7 @@ public class MessageService {
                                     break;
                                 }
                             }
-                            if (messages[currentMessage] != null && !isPrinted) {
+                            if (!isPrinted) {
                                 processMessage(level, messages[currentMessage]);
                                 ++printedWritedMessage;
                                 printedMessages[printedWritedMessage] = messages[currentMessage];
@@ -137,7 +137,7 @@ public class MessageService {
                                     break;
                                 }
                             }
-                            if (messages[currentMessage] != null && !isPrinted) {
+                            if (!isPrinted) {
                                 processMessage(level, messages[currentMessage]);
                                 ++printedWritedMessage;
                                 printedMessages[printedWritedMessage] = messages[currentMessage];
@@ -150,9 +150,8 @@ public class MessageService {
                                 break;
                             }
                         }
-                        if (message != null && !isPrinted) {
+                        if (!isPrinted) {
                             processMessage(level, message);
-                            //++printedWritedMessage;
                             printedMessages[printedMessages.length-1] = message;
                         }
                         break;
