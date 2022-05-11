@@ -25,13 +25,15 @@ class Application {
 //        processMessages(Severity.MAJOR, MessageOrder.DESC, Doubling.DISTINCT, "Hello world!", "Hello world!", "Ciao mondo!", "¡Hola Mundo!", "Hallo Welt!", "Hei Verden!", "Hei maailma!");
 
         Message message1 = new Message(Severity.MAJOR, "Hello world!");
-        Message message2 = new Message(Severity.REGULAR, "Ciao mondo!");
-        Message message3 = new Message(Severity.MINOR, null);
-        Message message4 = new Message(null, "¡Hola Mundo!");
-        Message message5 = new Message(Severity.MAJOR, "Hello world!");
-        processMessages(message1, message2, message3, message4, message5);
-        processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5);
-        processMessages(null, Doubling.DOUBLES, message1, message2, message3, message4, message5);
-        processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5);
+        Message message2 = new Message(Severity.MINOR, "Hello world!");
+        Message message3 = new Message(Severity.REGULAR, "Ciao mondo!");
+        Message message4 = new Message(Severity.MINOR, null);
+        Message message5 = new Message(null, "¡Hola Mundo!");
+        Message message6 = new Message(Severity.MAJOR, "Hello world!");
+//        processMessages(message1, message2, message3, message4, message5);
+//        processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5);
+//        processMessages(null, Doubling.DOUBLES, message1, message2, message3, message4, message5);
+        processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+//        processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
     }
 }
