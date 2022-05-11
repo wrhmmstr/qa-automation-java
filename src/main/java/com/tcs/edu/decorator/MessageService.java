@@ -13,16 +13,16 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
  *
  * @author t.m.kharchenko
- * @see #processMessage(Severity, String) Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
- * @see #processMessages(Severity, String, String...) Метод для преобразования декорированных сообщений по примеру processMessage
- * @see #processMessages(Severity, MessageOrder, String, String...) Перегруженный метод для преобразования декорированных сообщений
+ * @see #processMessage(Message) Метод для преобразования декорированного сообщения, уровня важности и разделителя в строку
+ * @see #processMessages(Message, Message...) Метод для преобразования декорированных сообщений по примеру processMessage
+ * @see #processMessages(MessageOrder, Message, Message...) Перегруженный метод для преобразования декорированных сообщений
  * по примеру processMessage, с возможностью обратной сортировки по последовательности vararg.
- * @see #processMessages(Severity, MessageOrder, Doubling, String, String...) Перегруженный метод для преобразования декорированных сообщений
+ * @see #processMessages(MessageOrder, Doubling, Message, Message...) Перегруженный метод для преобразования декорированных сообщений
  * по примеру processMessage, с возможностью обратной сортировки по последовательности vararg, и возможностью удаления дублей сообщения.
- * @see #processMessagesCycle(Severity, String...) Метод преобразует декорированные сообщения из массива по примеру processMessage
- * @see #processMessagesCycle(Severity, MessageOrder, String...) Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
+ * @see #processMessagesCycle(Message...) Метод преобразует декорированные сообщения из массива по примеру processMessage
+ * @see #processMessagesCycle(MessageOrder, Message...) Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
  * с возможностью сортировки по возрастанию и убыванию
- * @see #processPrintedMessages(Severity, int, int, String, String[]) Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений
+ * @see #processPrintedMessages(int, int, Message, String[]) Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений
  */
 public class MessageService {
     /**
@@ -153,7 +153,7 @@ public class MessageService {
                         switch (order) {
                             case ASC: {
                                 processMessage(message);
-                                printedMessages[printedWrittenMessageIndex] = String.valueOf(message);
+                                printedMessages[printedWrittenMessageIndex] = message.getMessage();
                                 for (int currentMessageIndex = 0; currentMessageIndex < messages.length; currentMessageIndex++) {
                                     Message currentMessage = messages[currentMessageIndex];
                                     printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessageIndex, currentMessage, printedMessages);
@@ -165,7 +165,7 @@ public class MessageService {
                                     Message currentMessage = messages[currentMessageIndex];
                                     printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessageIndex, currentMessage, printedMessages);
                                 }
-                                processPrintedMessages(printedWrittenMessageIndex, printedMessages.length - 1, message, printedMessages);
+                                processPrintedMessages(printedWrittenMessageIndex, printedMessages.length, message, printedMessages);
                                 break;
                             }
                         }
@@ -187,8 +187,9 @@ public class MessageService {
      */
     private static int processPrintedMessages(int printedWrittenMessageIndex, int currentMessageIndex, Message currentMessage, String[] printedMessages) {
         boolean isPrinted = false;
-        for (int printedMessageIndex = 0; printedMessageIndex <= currentMessageIndex; printedMessageIndex++) {
-            if (Objects.equals(String.valueOf(currentMessage), printedMessages[printedMessageIndex])) {
+        for (int printedMessageIndex = 0; printedMessageIndex < printedMessages.length; printedMessageIndex++) {
+//            if (Objects.equals(String.valueOf(currentMessage), printedMessages[printedMessageIndex])) {
+            if (Objects.equals(currentMessage.getMessage(), printedMessages[printedMessageIndex])) {
                 isPrinted = true;
                 break;
             }
@@ -196,7 +197,7 @@ public class MessageService {
         if (!isPrinted) {
             processMessage(currentMessage);
             ++printedWrittenMessageIndex;
-            printedMessages[printedWrittenMessageIndex] = String.valueOf(currentMessage);
+            printedMessages[printedWrittenMessageIndex] = currentMessage.getMessage();
         }
         return printedWrittenMessageIndex;
     }
