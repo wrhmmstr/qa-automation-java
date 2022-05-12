@@ -9,7 +9,6 @@ import com.tcs.edu.printer.ConsolePrinter;
 import java.util.Objects;
 
 import static com.tcs.edu.decorator.PagingDecorator.messageToPage;
-import static com.tcs.edu.decorator.SeverityDecorator.mapToString;
 import static com.tcs.edu.decorator.TimestampMessageDecorator.*;
 
 /**
@@ -43,7 +42,7 @@ public class DecoratingMessageService implements MessageService {
     public void processMessage(Message message) {
         if (message.getMessage() != null) {
             if (message.getLevel() != null) {
-                printer.print(String.format("%s %s %s", decorator.decorate(message), mapToString(message.getLevel()), messageToPage(messageCount)));
+                printer.print(String.format("%s %s %s", decorator.decorate(message), message.getLevel().getSeverity(), messageToPage(messageCount)));
             } else {
                 printer.print(String.format("%s %s", decorator.decorate(message), messageToPage(messageCount)));
             }
