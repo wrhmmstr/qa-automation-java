@@ -1,15 +1,11 @@
 package com.tcs.edu;
 
+import com.tcs.edu.decorator.DecoratingMessageService;
 import com.tcs.edu.decorator.Doubling;
 import com.tcs.edu.decorator.MessageOrder;
-import com.tcs.edu.decorator.MessageService;
 import com.tcs.edu.decorator.Severity;
 import com.tcs.edu.domain.Message;
-import com.tcs.edu.randomizer.ConsoleOutputRandomizer;
-import com.tcs.edu.randomizer.EnumRandomizer;
 
-import static com.tcs.edu.decorator.MessageService.processMessage;
-import static com.tcs.edu.decorator.MessageService.processMessages;
 
 class Application {
     public static void main(String[] args) {
@@ -31,10 +27,11 @@ class Application {
         Message message5 = new Message(null, "¡Hola Mundo!");
         Message message6 = new Message(Severity.MAJOR, "Hello world!");
 
-//        processMessages(message1, message2, message3, message4, message5);
-//        processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5);
-//        processMessages(null, Doubling.DOUBLES, message1, message2, message3, message4, message5);
-        processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
-        processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+        MessageService service = new DecoratingMessageService();
+
+//        processMessages(message1, message2, message3, message4, message5, message6);
+//        processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
     }
 }

@@ -1,13 +1,16 @@
 package com.tcs.edu.decorator;
 
+import com.tcs.edu.MessageDecorator;
+import com.tcs.edu.MessageService;
+import com.tcs.edu.Printer;
 import com.tcs.edu.domain.Message;
+import com.tcs.edu.printer.ConsolePrinter;
 
 import java.util.Objects;
 
 import static com.tcs.edu.decorator.PagingDecorator.messageToPage;
 import static com.tcs.edu.decorator.SeverityDecorator.mapToString;
 import static com.tcs.edu.decorator.TimestampMessageDecorator.*;
-import static com.tcs.edu.printer.ConsolePrinter.print;
 
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
@@ -22,32 +25,27 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
  * @see #processMessagesCycle(Message...) Метод преобразует декорированные сообщения из массива по примеру processMessage
  * @see #processMessagesCycle(MessageOrder, Message...) Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
  * с возможностью сортировки по возрастанию и убыванию
- * @see #processPrintedMessages(int, int, Message, String[]) Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений
+ * @see #processPrintedMessages(int, Message, String[]) Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений
  */
-public class MessageService {
+public class DecoratingMessageService implements MessageService {
+
+    private final Printer printer = new ConsolePrinter();
+    private final MessageDecorator decorator = new TimestampMessageDecorator();
+
     /**
      * Метод преобразует непустое декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль
      * и выводит полученную строку на печать.
      * Если сообщение пустое, то преобразование не происходит. Если уровень важности пустой, то не участвует в преобразовании.
      *
      * @param message Строка (String) с сообщением для декорирования
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-//    public static void processMessage(Severity level, String message) {
-//        if (message != null) {
-//            if (level != null) {
-//                print(String.format("%s %s %s", decorate(message), mapToString(level), messageToPage(messageCount)));
-//            } else {
-//                print(String.format("%s %s", decorate(message), messageToPage(messageCount)));
-//            }
-//        }
-//    }
-    public static void processMessage(Message message) {
+    public void processMessage(Message message) {
         if (message.getMessage() != null) {
             if (message.getLevel() != null) {
-                print(String.format("%s %s %s", decorate(message), mapToString(message.getLevel()), messageToPage(messageCount)));
+                printer.print(String.format("%s %s %s", decorator.decorate(message), mapToString(message.getLevel()), messageToPage(messageCount)));
             } else {
-                print(String.format("%s %s", decorate(message), messageToPage(messageCount)));
+                printer.print(String.format("%s %s", decorator.decorate(message), messageToPage(messageCount)));
             }
         }
     }
@@ -56,9 +54,9 @@ public class MessageService {
      * Метод преобразует декорированные сообщения из массива по примеру processMessage
      *
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-    public static void processMessagesCycle(Message... messages) {
+    public void processMessagesCycle(Message... messages) {
         for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
             processMessage(messages[currentMessage]);
         }
@@ -70,9 +68,9 @@ public class MessageService {
      *
      * @param order    Перечислимый тип (переменная типа MessageOrder) с порядком сортировки последовательности vararg
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-    private static void processMessagesCycle(MessageOrder order, Message... messages) {
+    private void processMessagesCycle(MessageOrder order, Message... messages) {
         switch (order) {
             case ASC: {
                 processMessagesCycle(messages);
@@ -92,9 +90,9 @@ public class MessageService {
      *
      * @param message  Строка (String) с сообщением для декорирования
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-    public static void processMessages(Message message, Message... messages) {
+    public void processMessages(Message message, Message... messages) {
         processMessage(message);
         processMessagesCycle(messages);
     }
@@ -106,9 +104,9 @@ public class MessageService {
      * @param order    Перечислимый тип (переменная типа MessageOrder) с порядком сортировки последовательности vararg
      * @param message  Строка (String) с сообщением для декорирования
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-    public static void processMessages(MessageOrder order, Message message, Message... messages) {
+    public void processMessages(MessageOrder order, Message message, Message... messages) {
         if (order != null) {
             switch (order) {
                 case ASC: {
@@ -132,9 +130,9 @@ public class MessageService {
      * @param doubling Перечислимый тип (переменная типа Doubling) с признаком наличия дублей
      * @param message  Строка (String) с сообщением для декорирования
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-    public static void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) {
+    public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) {
         if (doubling != null) {
             switch (doubling) {
                 case DOUBLES: {
@@ -156,16 +154,16 @@ public class MessageService {
                                 printedMessages[printedWrittenMessageIndex] = message.getMessage();
                                 for (int currentMessageIndex = 0; currentMessageIndex < messages.length; currentMessageIndex++) {
                                     Message currentMessage = messages[currentMessageIndex];
-                                    printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessageIndex, currentMessage, printedMessages);
+                                    printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessage, printedMessages);
                                 }
                                 break;
                             }
                             case DESC: {
                                 for (int currentMessageIndex = messages.length - 1; currentMessageIndex >= 0; currentMessageIndex--) {
                                     Message currentMessage = messages[currentMessageIndex];
-                                    printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessageIndex, currentMessage, printedMessages);
+                                    printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessage, printedMessages);
                                 }
-                                processPrintedMessages(printedWrittenMessageIndex, printedMessages.length, message, printedMessages);
+                                processPrintedMessages(printedWrittenMessageIndex, message, printedMessages);
                                 break;
                             }
                         }
@@ -180,15 +178,13 @@ public class MessageService {
      * Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений.
      *
      * @param printedWrittenMessageIndex Целочисленный порядковый номер уникального сообщения выведенного на печать и записанного в массив
-     * @param currentMessageIndex        Целочисленный порядковый номер текущего сообщения
      * @param currentMessage             Текущее сообщение
      * @param printedMessages            Массив выведенных на печать уникальных сообщений
-     * @see MessageService Родительский класс
+     * @see DecoratingMessageService Родительский класс
      */
-    private static int processPrintedMessages(int printedWrittenMessageIndex, int currentMessageIndex, Message currentMessage, String[] printedMessages) {
+    private int processPrintedMessages(int printedWrittenMessageIndex, Message currentMessage, String[] printedMessages) {
         boolean isPrinted = false;
         for (int printedMessageIndex = 0; printedMessageIndex < printedMessages.length; printedMessageIndex++) {
-//            if (Objects.equals(String.valueOf(currentMessage), printedMessages[printedMessageIndex])) {
             if (Objects.equals(currentMessage.getMessage(), printedMessages[printedMessageIndex])) {
                 isPrinted = true;
                 break;
