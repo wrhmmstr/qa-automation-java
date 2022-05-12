@@ -1,12 +1,14 @@
 package com.tcs.edu.decorator;
 
+import com.tcs.edu.domain.Message;
+
 import java.time.Instant;
 
 /**
  * Декорирование сообщений с операцией добавления к строке текущего времени
  *
  * @author  t.m.kharchenko
- * @see     #decorate(String) Метод для добавления текущего времени к сообщению
+ * @see     #decorate(Message) Метод для добавления текущего времени к сообщению
  */
 
 public class TimestampMessageDecorator {
@@ -22,9 +24,9 @@ public class TimestampMessageDecorator {
      * @return          Строка с декорированным сообщением из текущего времени, пробела и сообщения message
      * @see             TimestampMessageDecorator Родительский класс
      */
-    public static String decorate(String message){
+    public static String decorate(Message message){
         ++messageCount;
-        final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message);
+        final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message.getMessage());
         return decoratedMessage;
     }
 }

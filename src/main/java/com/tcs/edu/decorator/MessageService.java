@@ -45,9 +45,9 @@ public class MessageService {
     public static void processMessage(Message message) {
         if (message.getMessage() != null) {
             if (message.getLevel() != null) {
-                print(String.format("%s %s %s", decorate(message.getMessage()), mapToString(message.getLevel()), messageToPage(messageCount)));
+                print(String.format("%s %s %s", decorate(message), mapToString(message.getLevel()), messageToPage(messageCount)));
             } else {
-                print(String.format("%s %s", decorate(message.getMessage()), messageToPage(messageCount)));
+                print(String.format("%s %s", decorate(message), messageToPage(messageCount)));
             }
         }
     }
