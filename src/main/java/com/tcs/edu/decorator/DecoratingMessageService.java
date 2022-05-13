@@ -4,7 +4,6 @@ import com.tcs.edu.MessageDecorator;
 import com.tcs.edu.MessageService;
 import com.tcs.edu.Printer;
 import com.tcs.edu.domain.Message;
-import com.tcs.edu.printer.ConsolePrinter;
 
 import java.util.Objects;
 
@@ -27,9 +26,16 @@ import static com.tcs.edu.decorator.TimestampPageMessageDecorator.messageCount;
  */
 public class DecoratingMessageService implements MessageService {
 
-    private final Printer printer = new ConsolePrinter();
-    private final MessageDecorator decorator = new TimestampPageMessageDecorator();
-    private final MessageDecorator pagingDecorator = new TimestampPageMessageDecorator();
+//    private final Printer printer = new ConsolePrinter();
+    private final Printer printer;
+    private final MessageDecorator decorator;
+    private final MessageDecorator pagingDecorator;
+
+    public DecoratingMessageService(Printer printer, MessageDecorator decorator, MessageDecorator pagingDecorator) {
+        this.printer = printer;
+        this.decorator = decorator;
+        this.pagingDecorator = pagingDecorator;
+    }
 
     /**
      * Метод преобразует непустое декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль

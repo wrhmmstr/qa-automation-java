@@ -42,6 +42,7 @@ public class TimestampPageMessageDecorator implements MessageDecorator {
      * @return              Строка c разделителем страницы
      * @see                 TimestampPageMessageDecorator Родительский класс
      */
+    @Override
     public String messageToPage(int messageCount) {
         final String decoratedMessage;
         if (messageCount % PAGE_SIZE == 0) {
