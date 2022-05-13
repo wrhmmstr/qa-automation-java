@@ -8,8 +8,7 @@ import com.tcs.edu.printer.ConsolePrinter;
 
 import java.util.Objects;
 
-import static com.tcs.edu.decorator.PagingDecorator.messageToPage;
-import static com.tcs.edu.decorator.TimestampMessageDecorator.*;
+import static com.tcs.edu.decorator.TimestampPageMessageDecorator.messageCount;
 
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
@@ -29,7 +28,8 @@ import static com.tcs.edu.decorator.TimestampMessageDecorator.*;
 public class DecoratingMessageService implements MessageService {
 
     private final Printer printer = new ConsolePrinter();
-    private final MessageDecorator decorator = new TimestampMessageDecorator();
+    private final MessageDecorator decorator = new TimestampPageMessageDecorator();
+    private final MessageDecorator pagingDecorator = new TimestampPageMessageDecorator();
 
     /**
      * Метод преобразует непустое декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль
@@ -42,9 +42,9 @@ public class DecoratingMessageService implements MessageService {
     public void processMessage(Message message) {
         if (message.getMessage() != null) {
             if (message.getLevel() != null) {
-                printer.print(String.format("%s %s %s", decorator.decorate(message), message.getLevel().getSeverity(), messageToPage(messageCount)));
+                printer.print(String.format("%s %s %s", decorator.decorate(message), message.getLevel().getSeverity(), pagingDecorator.messageToPage(messageCount)));
             } else {
-                printer.print(String.format("%s %s", decorator.decorate(message), messageToPage(messageCount)));
+                printer.print(String.format("%s %s", decorator.decorate(message), pagingDecorator.messageToPage(messageCount)));
             }
         }
     }

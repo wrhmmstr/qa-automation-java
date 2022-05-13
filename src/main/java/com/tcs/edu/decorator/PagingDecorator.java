@@ -1,4 +1,9 @@
+//TODO удалить неиспользуемый класс
+
 package com.tcs.edu.decorator;
+
+import com.tcs.edu.MessageDecorator;
+
 /**
  * Добавление разделителя страницы
  *
@@ -9,7 +14,7 @@ public class PagingDecorator {
     /**
      * Переменная с количеством строк на одной странице
      */
-    private static final int PAGE_SIZE = 2; //TODO передавать значение размера страницы из класса Application
+    private static final int PAGE_SIZE = 2;
     /**
      * Метод добавляет разделитель страницы после строки кратной PAGE_SIZE
      * Побочные эффекты пока отсутствуют.
@@ -21,11 +26,11 @@ public class PagingDecorator {
     public static String messageToPage(int messageCount){
 
         if (messageCount % PAGE_SIZE == 0) {
-            final var decoratedMessage = String.format("%n---");
-            return decoratedMessage;
+            final var decoratedPage = String.format("%n---");
+            return decoratedPage;
         } else {
-            final var decoratedMessage = String.format("");
-            return decoratedMessage;
+            final var decoratedPage = String.format("");
+            return decoratedPage;
         }
     }
 }
