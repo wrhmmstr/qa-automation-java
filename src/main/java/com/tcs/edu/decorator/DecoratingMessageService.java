@@ -24,7 +24,6 @@ import java.util.Objects;
  */
 public class DecoratingMessageService implements MessageService {
 
-//    private final Printer printer = new ConsolePrinter();
     private final Printer printer;
     private final MessageDecorator decorator;
     private final MessageDecorator pagingDecorator;
@@ -143,11 +142,6 @@ public class DecoratingMessageService implements MessageService {
                     break;
                 }
                 case DISTINCT: {
-                    //условие задачи "по размеру равным длине последовательности vararg" нарушенно намеренно
-                    //+ комментарий от преподавателя:
-                    // "Не допускать при выводе дублей из всего множества входных параметров – сообщений.
-                    //То есть на вход могут быть дубли сообщений в множестве String message + String… messages."
-                    //в случае когда все сообщения будут непустыми в массиве нужно место для String message + String… messages.
                     if (order != null) {
                         String[] printedMessages = new String[messages.length + 1];
                         int printedWrittenMessageIndex = 0;
