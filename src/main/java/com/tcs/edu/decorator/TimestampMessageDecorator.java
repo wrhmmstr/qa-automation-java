@@ -1,5 +1,8 @@
 package com.tcs.edu.decorator;
 
+import com.tcs.edu.MessageDecorator;
+import com.tcs.edu.domain.Message;
+
 import java.time.Instant;
 
 /**
@@ -9,11 +12,11 @@ import java.time.Instant;
  * @see     #decorate(String) Метод для добавления текущего времени к сообщению
  */
 
-public class TimestampMessageDecorator {
+public class TimestampMessageDecorator implements MessageDecorator {
     /**
      * Переменная с количеством выведенных сообщений
      */
-    public static int messageCount = 0;
+
     /**
      * Метод добавляет порядковый номер и текущее время к сообщению через пробел с помощью форматирования.
      * Побочные эффекты пока отсутствуют.
@@ -22,9 +25,9 @@ public class TimestampMessageDecorator {
      * @return          Строка с декорированным сообщением из текущего времени, пробела и сообщения message
      * @see             TimestampMessageDecorator Родительский класс
      */
-    public static String decorate(String message){
-        ++messageCount;
-        final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now().toString(), message);
+    @Override
+    public String decorate(String message){
+        final var decoratedMessage = String.format("%s %s", Instant.now().toString(), message);
         return decoratedMessage;
     }
 }

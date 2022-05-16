@@ -1,6 +1,12 @@
+//TODO удалить неиспользуемый класс
+
 package com.tcs.edu.decorator;
+
+import com.tcs.edu.domain.Severity;
+
 /**
  * Преобразование перечислимого типа в строку
+ * Класс устарел, нигде не используется
  *
  * @author  t.m.kharchenko
  * @see     #mapToString(Severity) Метод для преобразования перечислимого типа в строку

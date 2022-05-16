@@ -1,6 +1,6 @@
 package com.tcs.edu.randomizer;
 
-import com.tcs.edu.decorator.Severity;
+import com.tcs.edu.domain.Severity;
 import java.util.Random;
 /**
  * Вычисление случайного случайного порядкового номера enum Severity
