@@ -1,6 +1,9 @@
 //TODO удалить неиспользуемый класс
 
 package com.tcs.edu.decorator;
+
+import com.tcs.edu.domain.Severity;
+
 /**
  * Преобразование перечислимого типа в строку
  * Класс устарел, нигде не используется

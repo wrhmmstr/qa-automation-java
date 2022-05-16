@@ -1,7 +1,5 @@
 package com.tcs.edu.domain;
 
-import com.tcs.edu.decorator.Severity;
-
 public class Message {
     private final Severity level;
     private final String message;
