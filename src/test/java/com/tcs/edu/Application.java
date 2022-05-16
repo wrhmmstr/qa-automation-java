@@ -21,8 +21,8 @@ class Application {
 
         MessageService service = new DecoratingMessageService(
                 new ConsolePrinter(),
-                new TimestampPageMessageDecorator(),
-                new TimestampPageMessageDecorator()
+                new TimestampMessageDecorator(),
+                new PagingDecorator()
         );
 
 //        processMessages(message1, message2, message3, message4, message5, message6);

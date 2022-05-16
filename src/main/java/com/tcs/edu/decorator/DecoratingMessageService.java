@@ -7,8 +7,6 @@ import com.tcs.edu.domain.Message;
 
 import java.util.Objects;
 
-import static com.tcs.edu.decorator.TimestampPageMessageDecorator.messageCount;
-
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
  *
@@ -48,9 +46,9 @@ public class DecoratingMessageService implements MessageService {
     public void processMessage(Message message) {
         if (message.getMessage() != null) {
             if (message.getLevel() != null) {
-                printer.print(String.format("%s %s %s", decorator.decorate(message), message.getLevel().getSeverity(), pagingDecorator.messageToPage(messageCount)));
+                printer.print(pagingDecorator.decorate(String.format("%s %s", decorator.decorate(message.getMessage()), message.getLevel().getSeverity())));
             } else {
-                printer.print(String.format("%s %s", decorator.decorate(message), pagingDecorator.messageToPage(messageCount)));
+                printer.print(pagingDecorator.decorate(String.format("%s", decorator.decorate(message.getMessage()))));
             }
         }
     }
