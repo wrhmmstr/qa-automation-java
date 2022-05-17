@@ -25,14 +25,20 @@ import java.util.Objects;
 public class DecoratingMessageService implements MessageService {
 
     private final Printer printer;
-    private final MessageDecorator decorator;
-    private final MessageDecorator pagingDecorator;
+    private MessageDecorator decorator;
+    private MessageDecorator pagingDecorator;
 
-    public DecoratingMessageService(Printer printer, MessageDecorator decorator, MessageDecorator pagingDecorator) {
+    public DecoratingMessageService(Printer printer, MessageDecorator... decorators) {
         this.printer = printer;
-        this.decorator = decorator;
-        this.pagingDecorator = pagingDecorator;
+        for (int currentDecorator = 0; currentDecorator < decorators.length; currentDecorator++) {
+            this.decorator = decorators[currentDecorator];
+            this.pagingDecorator = decorators[++currentDecorator];
+        }
     }
+
+//    public void decoratorCycle(MessageDecorator... decorator){
+//
+//    }
 
     /**
      * Метод преобразует непустое декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль
