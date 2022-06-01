@@ -58,6 +58,16 @@ public class DecoratingMessageService implements MessageService {
         }
     }
 
+    public Message[] combineMessages(Message message, Message... messages) {
+        Message[] combinedMessages = new Message[messages.length+1];
+        int currentMessage = 0;
+        combinedMessages[currentMessage] = message;
+        for (currentMessage = 1; currentMessage < combinedMessages.length; currentMessage++) {
+            combinedMessages[currentMessage] = messages[currentMessage];
+        }
+        return combinedMessages;
+    }
+
     /**
      * Метод преобразует декорированные сообщения из массива по примеру processMessage
      *
@@ -101,8 +111,7 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(Message message, Message... messages) {
-        processMessage(message);
-        processMessagesCycle(messages);
+        processMessagesCycle(combineMessages(message, messages));
     }
 
     /**
@@ -122,8 +131,7 @@ public class DecoratingMessageService implements MessageService {
                     break;
                 }
                 case DESC: {
-                    processMessagesCycle(order, messages);
-                    processMessage(message);
+                    processMessagesCycle(order, combineMessages(message, messages));
                     break;
                 }
             }
