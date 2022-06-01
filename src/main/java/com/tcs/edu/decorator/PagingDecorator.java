@@ -14,10 +14,19 @@ public class PagingDecorator implements MessageDecorator {
      * Переменная с порядковым номером строки
      */
     public static int messageCount = 0;
+
     /**
      * Переменная с количеством строк на одной странице
      */
-    private final int PAGE_SIZE = 2;
+    public int pageSize = 0;
+
+    public PagingDecorator(int pageSize) {
+        this.pageSize = pageSize;
+    }
+    public PagingDecorator() {
+        this(2);
+    }
+
     /**
      * Метод добавляет разделитель страницы после строки кратной PAGE_SIZE
      * Побочные эффекты пока отсутствуют.
@@ -29,7 +38,7 @@ public class PagingDecorator implements MessageDecorator {
     public String decorate(String message){
         ++messageCount;
         final String decoratedMessage;
-        if (messageCount % PAGE_SIZE == 0) {
+        if (messageCount % pageSize == 0) {
             decoratedMessage = String.format("%d %s %n---", messageCount, message);
         } else {
             decoratedMessage = String.format("%d %s", messageCount, message);
