@@ -25,20 +25,12 @@ import java.util.Objects;
 public class DecoratingMessageService implements MessageService {
 
     private final Printer printer;
-    private MessageDecorator decorator;
-    private MessageDecorator pagingDecorator;
+    private final MessageDecorator[] decorators;
 
     public DecoratingMessageService(Printer printer, MessageDecorator... decorators) {
         this.printer = printer;
-        for (int currentDecorator = 0; currentDecorator < decorators.length; currentDecorator++) {
-            this.decorator = decorators[currentDecorator];
-            this.pagingDecorator = decorators[++currentDecorator];
+        this.decorators = decorators;
         }
-    }
-
-//    public void decoratorCycle(MessageDecorator... decorator){
-//
-//    }
 
     /**
      * Метод преобразует непустое декорированное сообщение, уровень важности и разделитель страницы в строку для вывода в консоль
@@ -49,12 +41,21 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessage(Message message) {
+
         if (message.getMessage() != null) {
+            String processedMessage;
             if (message.getLevel() != null) {
-                printer.print(pagingDecorator.decorate(String.format("%s %s", decorator.decorate(message.getMessage()), message.getLevel().getSeverity())));
+                processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
+                for (MessageDecorator decorator : decorators) {
+                    processedMessage = decorator.decorate(processedMessage);
+                }
             } else {
-                printer.print(pagingDecorator.decorate(String.format("%s", decorator.decorate(message.getMessage()))));
+                processedMessage = message.getMessage();
+                for (MessageDecorator decorator : decorators) {
+                    processedMessage = decorator.decorate(processedMessage);
+                }
             }
+            printer.print(processedMessage);
         }
     }
 
