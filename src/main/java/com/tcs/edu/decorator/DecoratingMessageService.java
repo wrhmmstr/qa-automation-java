@@ -1,6 +1,7 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.MessageDecorator;
+import com.tcs.edu.MessageProcessor;
 import com.tcs.edu.MessageService;
 import com.tcs.edu.Printer;
 import com.tcs.edu.domain.Message;
@@ -18,17 +19,19 @@ import java.util.Objects;
  * @see #processMessages(MessageOrder, Doubling, Message, Message...) Перегруженный метод для преобразования декорированных сообщений
  * по примеру processMessage, с возможностью обратной сортировки по последовательности vararg, и возможностью удаления дублей сообщения.
  * @see #processMessagesCycle(Message...) Метод преобразует декорированные сообщения из массива по примеру processMessage
- * @see #processMessagesCycle(MessageOrder, Message...) Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
+// * @see #processMessagesCycle(MessageOrder, Message...) Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
  * с возможностью сортировки по возрастанию и убыванию
  * @see #processPrintedMessages(int, Message, String[]) Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений
  */
 public class DecoratingMessageService implements MessageService {
 
     private final Printer printer;
+    private final MessageProcessor messageProcessor;
     private final MessageDecorator[] decorators;
 
-    public DecoratingMessageService(Printer printer, MessageDecorator... decorators) {
+    public DecoratingMessageService(Printer printer, MessageProcessor messageProcessor, MessageDecorator... decorators) {
         this.printer = printer;
+        this.messageProcessor = messageProcessor;
         this.decorators = decorators;
         }
 
@@ -41,7 +44,6 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessage(Message message) {
-
         if (message.getMessage() != null) {
             String processedMessage;
             if (message.getLevel() != null) {
@@ -59,12 +61,19 @@ public class DecoratingMessageService implements MessageService {
         }
     }
 
+    /**
+     * Метод комбинирует сообщение и массив сообщений в единый массив
+     *
+     * @param message   Строка (String) с сообщением для декорирования
+     * @param messages  Массив строк (String...) с сообщениями для декорирования
+     * @see DecoratingMessageService Родительский класс
+     */
     public Message[] combineMessages(Message message, Message... messages) {
         Message[] combinedMessages = new Message[messages.length+1];
         int currentMessage = 0;
         combinedMessages[currentMessage] = message;
         for (currentMessage = 1; currentMessage < combinedMessages.length; currentMessage++) {
-            combinedMessages[currentMessage] = messages[currentMessage];
+            combinedMessages[currentMessage] = messages[currentMessage-1];
         }
         return combinedMessages;
     }
@@ -89,20 +98,20 @@ public class DecoratingMessageService implements MessageService {
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
      * @see DecoratingMessageService Родительский класс
      */
-    private void processMessagesCycle(MessageOrder order, Message... messages) {
-        switch (order) {
-            case ASC: {
-                processMessagesCycle(messages);
-                break;
-            }
-            case DESC: {
-                for (int currentMessage = messages.length - 1; currentMessage >= 0; currentMessage--) {
-                    processMessage(messages[currentMessage]);
-                }
-                break;
-            }
-        }
-    }
+//    private void processMessagesCycle(MessageOrder order, Message... messages) {
+//        switch (order) {
+//            case ASC: {
+//                processMessagesCycle(messages);
+//                break;
+//            }
+//            case DESC: {
+//                for (int currentMessage = messages.length - 1; currentMessage >= 0; currentMessage--) {
+//                    processMessage(messages[currentMessage]);
+//                }
+//                break;
+//            }
+//        }
+//    }
 
     /**
      * Метод преобразует декорированные сообщения по примеру processMessage
@@ -113,6 +122,9 @@ public class DecoratingMessageService implements MessageService {
      */
     public void processMessages(Message message, Message... messages) {
         processMessagesCycle(combineMessages(message, messages));
+//        for (int currentMessage = 0; currentMessage < messages.length+1; currentMessage++) {
+//            processMessage(combineMessages(message, messages)[currentMessage]);
+//        }
     }
 
     /**
@@ -126,16 +138,18 @@ public class DecoratingMessageService implements MessageService {
      */
     public void processMessages(MessageOrder order, Message message, Message... messages) {
         if (order != null) {
-            switch (order) {
-                case ASC: {
-                    processMessages(message, messages);
-                    break;
-                }
-                case DESC: {
-                    processMessagesCycle(order, combineMessages(message, messages));
-                    break;
-                }
-            }
+//            switch (order) {
+//                case ASC: {
+//                    processMessages(message, messages);
+//                    break;
+//                }
+//                case DESC: {
+//                    processMessagesCycle(order, combineMessages(message, messages));
+//                    break;
+//                }
+//            }
+//            messageProcessor.process(order, processMessages(message, messages));
+            processMessagesCycle(messageProcessor.process(order, combineMessages(message, messages)));
         }
     }
 
