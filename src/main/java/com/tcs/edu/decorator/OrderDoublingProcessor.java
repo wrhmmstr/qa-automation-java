@@ -55,7 +55,7 @@ public class OrderDoublingProcessor extends ValidatingService implements Message
     @Override
     public Message[] process(MessageOrder order, Doubling doubling, Message... messages) {
         super.isArgsValid(order, doubling);
-        Message[] processedMessages = new Message[messages.length];
+        Message[] processedMessages = null;
         switch (doubling) {
             case DOUBLES: {
                 processedMessages = process (order, messages);
@@ -64,21 +64,26 @@ public class OrderDoublingProcessor extends ValidatingService implements Message
             case DISTINCT: {
                 int currentMessageIndex = 0;
                 int distinctWrittenMessageIndex = 0;
+                Message[] processedMessagesWithEmpties = new Message[messages.length];
                 Message[] orderedMessages = process(order, messages);
-                processedMessages[distinctWrittenMessageIndex] = orderedMessages[currentMessageIndex];
+                processedMessagesWithEmpties[distinctWrittenMessageIndex] = orderedMessages[currentMessageIndex];
                 for (currentMessageIndex = 0; currentMessageIndex < orderedMessages.length; currentMessageIndex++) {
                     Message currentMessage = orderedMessages[currentMessageIndex];
                     boolean isPrinted = false;
                     for (int distinctMessageIndex = 0; distinctMessageIndex <= distinctWrittenMessageIndex; distinctMessageIndex++) {
-                        if (currentMessage.equals(processedMessages[distinctMessageIndex])) {
+                        if (currentMessage.equals(processedMessagesWithEmpties[distinctMessageIndex])) {
                             isPrinted = true;
                             break;
                         }
                     }
-                    if (!isPrinted) {
+                    if (!isPrinted && currentMessage.getMessage() != null) {
                         ++distinctWrittenMessageIndex;
-                        processedMessages[distinctWrittenMessageIndex] = currentMessage;
+                        processedMessagesWithEmpties[distinctWrittenMessageIndex] = currentMessage;
                     }
+                }
+                processedMessages = new Message[distinctWrittenMessageIndex + 1];
+                for (int processedMessageIndex = 0; processedMessageIndex < processedMessages.length; processedMessageIndex++) {
+                    processedMessages[processedMessageIndex] = processedMessagesWithEmpties[processedMessageIndex];
                 }
                 break;
             }
