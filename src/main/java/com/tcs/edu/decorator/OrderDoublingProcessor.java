@@ -5,8 +5,23 @@ import com.tcs.edu.domain.Message;
 
 import java.util.Objects;
 
+/**
+ * Процессинг массива сообщений в соответствии с заданным порядком и наличием дублей
+ *
+ * @author  t.m.kharchenko
+ * @see #process(MessageOrder, Message...)              Метод для сортировки массива сообщений по заданному порядку
+ * @see #process(MessageOrder, Doubling, Message...)    Метод для исключения дублей в массиве сообщений по заданному порядку
+ */
+
 public class OrderDoublingProcessor implements MessageProcessor {
 
+    /**
+     * Метод для сортировки массива сообщений по заданному порядку
+     * @param order                 Перечислимый тип (переменная типа MessageOrder) с порядком сортировки
+     * @param messages              Массив сообщений (переменная типа Message[])
+     * @return                      Массив сообщений
+     * @see OrderDoublingProcessor  Родительский класс
+     */
     @Override
     public Message[] process (MessageOrder order, Message... messages) {
         Message[] processedMessages = new Message[messages.length];
@@ -27,6 +42,14 @@ public class OrderDoublingProcessor implements MessageProcessor {
         return processedMessages;
     }
 
+    /**
+     * Перегруженный метод для определения дублей в отсортированном массиве сообщений
+     * @param order                 Перечислимый тип (переменная типа MessageOrder) с порядком сортировки
+     * @param doubling              Перечислимый тип (переменная типа Doubling) с определением наличия дублей
+     * @param messages              Массив сообщений (переменная типа Message[])
+     * @return                      Массив сообщений
+     * @see OrderDoublingProcessor  Родительский класс
+     */
     @Override
     public Message[] process(MessageOrder order, Doubling doubling, Message... messages) {
         Message[] processedMessages = new Message[messages.length];
