@@ -6,8 +6,6 @@ import com.tcs.edu.MessageService;
 import com.tcs.edu.Printer;
 import com.tcs.edu.domain.Message;
 
-import java.util.Objects;
-
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
  *
@@ -19,9 +17,7 @@ import java.util.Objects;
  * @see #processMessages(MessageOrder, Doubling, Message, Message...) Перегруженный метод для преобразования декорированных сообщений
  * по примеру processMessage, с возможностью обратной сортировки по последовательности vararg, и возможностью удаления дублей сообщения.
  * @see #processMessagesCycle(Message...) Метод преобразует декорированные сообщения из массива по примеру processMessage
-// * @see #processMessagesCycle(MessageOrder, Message...) Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
- * с возможностью сортировки по возрастанию и убыванию
- * @see #processPrintedMessages(int, Message, String[]) Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений
+ * @see #combineMessages(Message, Message...) Метод преобразует сообщение и варарг сообщений в единый массив
  */
 public class DecoratingMessageService implements MessageService {
 
@@ -44,20 +40,22 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessage(Message message) {
-        if (message.getMessage() != null) {
-            String processedMessage;
-            if (message.getLevel() != null) {
-                processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
-                for (MessageDecorator decorator : decorators) {
-                    processedMessage = decorator.decorate(processedMessage);
+        if (message != null) {
+            if (message.getMessage() != null) {
+                String processedMessage;
+                if (message.getLevel() != null) {
+                    processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
+                    for (MessageDecorator decorator : decorators) {
+                        processedMessage = decorator.decorate(processedMessage);
+                    }
+                } else {
+                    processedMessage = message.getMessage();
+                    for (MessageDecorator decorator : decorators) {
+                        processedMessage = decorator.decorate(processedMessage);
+                    }
                 }
-            } else {
-                processedMessage = message.getMessage();
-                for (MessageDecorator decorator : decorators) {
-                    processedMessage = decorator.decorate(processedMessage);
-                }
+                printer.print(processedMessage);
             }
-            printer.print(processedMessage);
         }
     }
 
@@ -91,29 +89,6 @@ public class DecoratingMessageService implements MessageService {
     }
 
     /**
-     * Перегруженный метод преобразует декорированные сообщения из массива по примеру processMessagesCycle,
-     * с возможностью сортировки по возрастанию и убыванию
-     *
-     * @param order    Перечислимый тип (переменная типа MessageOrder) с порядком сортировки последовательности vararg
-     * @param messages Массив строк (String varargs) с сообщениями для декорирования
-     * @see DecoratingMessageService Родительский класс
-     */
-//    private void processMessagesCycle(MessageOrder order, Message... messages) {
-//        switch (order) {
-//            case ASC: {
-//                processMessagesCycle(messages);
-//                break;
-//            }
-//            case DESC: {
-//                for (int currentMessage = messages.length - 1; currentMessage >= 0; currentMessage--) {
-//                    processMessage(messages[currentMessage]);
-//                }
-//                break;
-//            }
-//        }
-//    }
-
-    /**
      * Метод преобразует декорированные сообщения по примеру processMessage
      *
      * @param message  Строка (String) с сообщением для декорирования
@@ -122,9 +97,6 @@ public class DecoratingMessageService implements MessageService {
      */
     public void processMessages(Message message, Message... messages) {
         processMessagesCycle(combineMessages(message, messages));
-//        for (int currentMessage = 0; currentMessage < messages.length+1; currentMessage++) {
-//            processMessage(combineMessages(message, messages)[currentMessage]);
-//        }
     }
 
     /**
@@ -138,17 +110,6 @@ public class DecoratingMessageService implements MessageService {
      */
     public void processMessages(MessageOrder order, Message message, Message... messages) {
         if (order != null) {
-//            switch (order) {
-//                case ASC: {
-//                    processMessages(message, messages);
-//                    break;
-//                }
-//                case DESC: {
-//                    processMessagesCycle(order, combineMessages(message, messages));
-//                    break;
-//                }
-//            }
-//            messageProcessor.process(order, processMessages(message, messages));
             processMessagesCycle(messageProcessor.process(order, combineMessages(message, messages)));
         }
     }
@@ -164,63 +125,10 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) {
-        if (doubling != null) {
-            switch (doubling) {
-                case DOUBLES: {
-                    processMessages(order, message, messages);
-                    break;
-                }
-                case DISTINCT: {
-                    if (order != null) {
-                        String[] printedMessages = new String[messages.length + 1];
-                        int printedWrittenMessageIndex = 0;
-                        switch (order) {
-                            case ASC: {
-                                processMessage(message);
-                                printedMessages[printedWrittenMessageIndex] = message.getMessage();
-                                for (int currentMessageIndex = 0; currentMessageIndex < messages.length; currentMessageIndex++) {
-                                    Message currentMessage = messages[currentMessageIndex];
-                                    printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessage, printedMessages);
-                                }
-                                break;
-                            }
-                            case DESC: {
-                                for (int currentMessageIndex = messages.length - 1; currentMessageIndex >= 0; currentMessageIndex--) {
-                                    Message currentMessage = messages[currentMessageIndex];
-                                    printedWrittenMessageIndex = processPrintedMessages(printedWrittenMessageIndex, currentMessage, printedMessages);
-                                }
-                                processPrintedMessages(printedWrittenMessageIndex, message, printedMessages);
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                }
+        if (order != null) {
+            if (doubling != null) {
+                processMessagesCycle(messageProcessor.process(order, doubling, combineMessages(message, messages)));
             }
         }
-    }
-
-    /**
-     * Метод проверяет текущее сообщение на вхождение в массив уже выведенных на на экран сообщений.
-     *
-     * @param printedWrittenMessageIndex Целочисленный порядковый номер уникального сообщения выведенного на печать и записанного в массив
-     * @param currentMessage             Текущее сообщение
-     * @param printedMessages            Массив выведенных на печать уникальных сообщений
-     * @see DecoratingMessageService Родительский класс
-     */
-    private int processPrintedMessages(int printedWrittenMessageIndex, Message currentMessage, String[] printedMessages) {
-        boolean isPrinted = false;
-        for (int printedMessageIndex = 0; printedMessageIndex < printedMessages.length; printedMessageIndex++) {
-            if (Objects.equals(currentMessage.getMessage(), printedMessages[printedMessageIndex])) {
-                isPrinted = true;
-                break;
-            }
-        }
-        if (!isPrinted) {
-            processMessage(currentMessage);
-            ++printedWrittenMessageIndex;
-            printedMessages[printedWrittenMessageIndex] = currentMessage.getMessage();
-        }
-        return printedWrittenMessageIndex;
     }
 }

@@ -26,9 +26,10 @@ class Application {
                 new PagingDecorator()
         );
 
-//        service.processMessages(message1, message2, message3, message4, message5, message6);
-        service.processMessages(MessageOrder.DESC, message1, message2, message3, message4, message5, message6);
-//        service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
-//        service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+        service.processMessages(message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
     }
 }
