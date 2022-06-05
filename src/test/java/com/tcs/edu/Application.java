@@ -1,9 +1,12 @@
 package com.tcs.edu;
 
 import com.tcs.edu.decorator.*;
+import com.tcs.edu.domain.Doubling;
 import com.tcs.edu.domain.Message;
+import com.tcs.edu.domain.MessageOrder;
 import com.tcs.edu.domain.Severity;
 import com.tcs.edu.printer.ConsolePrinter;
+import com.tcs.edu.service.DecoratingMessageService;
 
 
 class Application {
@@ -26,9 +29,9 @@ class Application {
                 new PagingDecorator()
         );
 
-        service.processMessages(message1, message2, message3, message4, message5, message6);
-        service.processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
-        service.processMessages(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message3, message4, message5, message6);
+//        service.processMessages(message1, message2, message3, message4, message5, message6);
+//        service.processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
+//        service.processMessages(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
     }

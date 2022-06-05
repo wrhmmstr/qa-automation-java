@@ -1,7 +1,9 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.MessageProcessor;
+import com.tcs.edu.domain.Doubling;
 import com.tcs.edu.domain.Message;
+import com.tcs.edu.domain.MessageOrder;
 
 import java.util.Objects;
 

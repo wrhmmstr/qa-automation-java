@@ -1,10 +1,12 @@
-package com.tcs.edu.decorator;
+package com.tcs.edu.service;
 
 import com.tcs.edu.MessageDecorator;
 import com.tcs.edu.MessageProcessor;
 import com.tcs.edu.MessageService;
 import com.tcs.edu.Printer;
+import com.tcs.edu.domain.Doubling;
 import com.tcs.edu.domain.Message;
+import com.tcs.edu.domain.MessageOrder;
 
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
@@ -19,7 +21,7 @@ import com.tcs.edu.domain.Message;
  * @see #processMessagesCycle(Message...) Метод преобразует декорированные сообщения из массива по примеру processMessage
  * @see #combineMessages(Message, Message...) Метод преобразует сообщение и варарг сообщений в единый массив
  */
-public class DecoratingMessageService implements MessageService {
+public class DecoratingMessageService extends ValidatingService implements MessageService {
 
     private final Printer printer;
     private final MessageProcessor messageProcessor;
@@ -40,10 +42,9 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessage(Message message) {
-        if (message != null) {
-            if (message.getMessage() != null) {
+        if (super.isArgsValid(message)) {
                 String processedMessage;
-                if (message.getLevel() != null) {
+                if (super.isArgsValid(message.getLevel())) {
                     processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
                     for (MessageDecorator decorator : decorators) {
                         processedMessage = decorator.decorate(processedMessage);
@@ -55,7 +56,6 @@ public class DecoratingMessageService implements MessageService {
                     }
                 }
                 printer.print(processedMessage);
-            }
         }
     }
 
@@ -109,7 +109,7 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(MessageOrder order, Message message, Message... messages) {
-        if (order != null) {
+        if (super.isArgsValid(order)) {
             processMessagesCycle(messageProcessor.process(order, combineMessages(message, messages)));
         }
     }
@@ -125,10 +125,8 @@ public class DecoratingMessageService implements MessageService {
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) {
-        if (order != null) {
-            if (doubling != null) {
+        if (super.isArgsValid(order, doubling)){
                 processMessagesCycle(messageProcessor.process(order, doubling, combineMessages(message, messages)));
-            }
         }
     }
 }

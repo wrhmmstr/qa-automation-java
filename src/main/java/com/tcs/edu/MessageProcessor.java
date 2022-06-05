@@ -1,7 +1,7 @@
 package com.tcs.edu;
 
-import com.tcs.edu.decorator.Doubling;
-import com.tcs.edu.decorator.MessageOrder;
+import com.tcs.edu.domain.Doubling;
+import com.tcs.edu.domain.MessageOrder;
 import com.tcs.edu.domain.Message;
 
 public interface MessageProcessor {
