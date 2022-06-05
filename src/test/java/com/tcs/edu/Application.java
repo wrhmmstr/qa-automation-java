@@ -31,8 +31,13 @@ class Application {
 
 //        service.processMessages(message1, message2, message3, message4, message5, message6);
 //        service.processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
-//        service.processMessages(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+        System.out.println(message1);
+        System.out.println(message1.equals(message2));
+        System.out.println(message1.equals(message3));
+        System.out.println(message1.hashCode()==message2.hashCode());
+        System.out.println(message1.hashCode()==message3.hashCode());
     }
 }
