@@ -21,6 +21,7 @@ class Application {
         Message message4 = new Message(Severity.MINOR, null);
         Message message5 = new Message(null, "¡Hola Mundo!");
         Message message6 = new Message(Severity.MAJOR, "Hello world!");
+        Message message7 = new Message(Severity.MINOR, "");
 
         MessageService service = new DecoratingMessageService(
                 new ConsolePrinter(),
@@ -29,11 +30,16 @@ class Application {
                 new PagingDecorator()
         );
 
-//        service.processMessages(message1, message2, message3, message4, message5, message6);
-//        service.processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
+        service.processMessages(message1, message2, message3, message4, message5, message6);
+        service.processMessages(MessageOrder.ASC, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
         service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+//        service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message7);
+//        service.processMessages(null, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
+//        service.processMessages(MessageOrder.DESC, null, message1, message2, message3, message4, message5, message6);
+//        service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, null, message3, message4, message5, message6);
+
         System.out.println(message1);
         System.out.println(message1.equals(message2));
         System.out.println(message1.equals(message3));

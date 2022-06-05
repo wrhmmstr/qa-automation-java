@@ -4,8 +4,7 @@ import com.tcs.edu.MessageProcessor;
 import com.tcs.edu.domain.Doubling;
 import com.tcs.edu.domain.Message;
 import com.tcs.edu.domain.MessageOrder;
-
-import java.util.Objects;
+import com.tcs.edu.service.ValidatingService;
 
 /**
  * Процессинг массива сообщений в соответствии с заданным порядком и наличием дублей
@@ -15,7 +14,7 @@ import java.util.Objects;
  * @see #process(MessageOrder, Doubling, Message...)    Метод для исключения дублей в массиве сообщений по заданному порядку
  */
 
-public class OrderDoublingProcessor implements MessageProcessor {
+public class OrderDoublingProcessor extends ValidatingService implements MessageProcessor {
 
     /**
      * Метод для сортировки массива сообщений по заданному порядку
@@ -26,6 +25,7 @@ public class OrderDoublingProcessor implements MessageProcessor {
      */
     @Override
     public Message[] process (MessageOrder order, Message... messages) {
+        super.isArgsValid(order);
         Message[] processedMessages = new Message[messages.length];
         switch (order) {
             case ASC: {
@@ -54,6 +54,7 @@ public class OrderDoublingProcessor implements MessageProcessor {
      */
     @Override
     public Message[] process(MessageOrder order, Doubling doubling, Message... messages) {
+        super.isArgsValid(order, doubling);
         Message[] processedMessages = new Message[messages.length];
         switch (doubling) {
             case DOUBLES: {
@@ -69,7 +70,7 @@ public class OrderDoublingProcessor implements MessageProcessor {
                     Message currentMessage = orderedMessages[currentMessageIndex];
                     boolean isPrinted = false;
                     for (int distinctMessageIndex = 0; distinctMessageIndex <= distinctWrittenMessageIndex; distinctMessageIndex++) {
-                        if (Objects.equals(currentMessage.getMessage(), processedMessages[distinctMessageIndex].getMessage())) {
+                        if (currentMessage.equals(processedMessages[distinctMessageIndex])) {
                             isPrinted = true;
                             break;
                         }

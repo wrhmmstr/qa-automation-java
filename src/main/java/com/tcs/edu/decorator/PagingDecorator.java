@@ -1,6 +1,7 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.MessageDecorator;
+import com.tcs.edu.service.ValidatingService;
 
 /**
  * Добавление разделителя страницы
@@ -9,7 +10,7 @@ import com.tcs.edu.MessageDecorator;
  * @see     #decorate(String) Метод для добавления порядкового номера страницы
  *                                 и разделителя страницы после строки кратной PAGE_SIZE
  */
-public class PagingDecorator implements MessageDecorator {
+public class PagingDecorator extends ValidatingService implements MessageDecorator {
     /**
      * Переменная с порядковым номером строки
      */
@@ -36,6 +37,7 @@ public class PagingDecorator implements MessageDecorator {
      * @see                 PagingDecorator Родительский класс
      */
     public String decorate(String message){
+        super.isArgsValid(message);
         ++messageCount;
         final String decoratedMessage;
         if (messageCount % pageSize == 0) {

@@ -1,9 +1,6 @@
 package com.tcs.edu.service;
 
-import com.tcs.edu.MessageDecorator;
-import com.tcs.edu.MessageProcessor;
-import com.tcs.edu.MessageService;
-import com.tcs.edu.Printer;
+import com.tcs.edu.*;
 import com.tcs.edu.domain.Doubling;
 import com.tcs.edu.domain.Message;
 import com.tcs.edu.domain.MessageOrder;
@@ -43,6 +40,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      */
     public void processMessage(Message message) {
         if (super.isArgsValid(message)) {
+            try {
                 String processedMessage;
                 if (super.isArgsValid(message.getLevel())) {
                     processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
@@ -56,6 +54,9 @@ public class DecoratingMessageService extends ValidatingService implements Messa
                     }
                 }
                 printer.print(processedMessage);
+            } catch(IllegalArgumentException e) {
+                throw new ExceptionLogger("Argument is invalid!", e);
+            }
         }
     }
 
@@ -109,8 +110,10 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(MessageOrder order, Message message, Message... messages) {
-        if (super.isArgsValid(order)) {
+        try {
             processMessagesCycle(messageProcessor.process(order, combineMessages(message, messages)));
+        } catch(IllegalArgumentException e) {
+            throw new ExceptionLogger("Argument is invalid!", e);
         }
     }
 
@@ -125,8 +128,10 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) {
-        if (super.isArgsValid(order, doubling)){
-                processMessagesCycle(messageProcessor.process(order, doubling, combineMessages(message, messages)));
+        try {
+            processMessagesCycle(messageProcessor.process(order, doubling, combineMessages(message, messages)));
+        } catch(IllegalArgumentException e) {
+            throw new ExceptionLogger("Argument is invalid!", e);
         }
     }
 }
