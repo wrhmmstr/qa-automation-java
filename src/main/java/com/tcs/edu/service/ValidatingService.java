@@ -7,7 +7,7 @@ import com.tcs.edu.domain.Severity;
 
 public abstract class ValidatingService {
     public boolean isArgsValid (Message message) {
-        if (message == null) return false;
+        if (message == null) throw new IllegalArgumentException("Message message value is" + message.getMessage() + ".");
         if (message.getMessage() == null) return false;
         if (message.getMessage().isEmpty()) throw new IllegalArgumentException("Message message.getMessage() value is: " + message.getMessage() + ".");
         return true;

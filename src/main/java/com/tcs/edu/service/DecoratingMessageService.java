@@ -39,25 +39,25 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessage(Message message) {
-        if (super.isArgsValid(message)) {
             try {
-                String processedMessage;
-                if (super.isArgsValid(message.getLevel())) {
-                    processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
-                    for (MessageDecorator decorator : decorators) {
-                        processedMessage = decorator.decorate(processedMessage);
+                if (super.isArgsValid(message)) {
+                    String processedMessage;
+                    if (super.isArgsValid(message.getLevel())) {
+                        processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
+                        for (MessageDecorator decorator : decorators) {
+                            processedMessage = decorator.decorate(processedMessage);
+                        }
+                    } else {
+                        processedMessage = message.getMessage();
+                        for (MessageDecorator decorator : decorators) {
+                            processedMessage = decorator.decorate(processedMessage);
+                        }
                     }
-                } else {
-                    processedMessage = message.getMessage();
-                    for (MessageDecorator decorator : decorators) {
-                        processedMessage = decorator.decorate(processedMessage);
-                    }
+                    printer.print(processedMessage);
                 }
-                printer.print(processedMessage);
             } catch(IllegalArgumentException e) {
                 throw new ExceptionLogger("Argument is invalid!", e);
             }
-        }
     }
 
     /**

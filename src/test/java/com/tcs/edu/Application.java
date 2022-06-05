@@ -37,7 +37,7 @@ class Application {
         service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
 //        service.processMessages(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message3, message4, message5, message7);
 //        service.processMessages(null, Doubling.DISTINCT, message1, message2, message3, message4, message5, message6);
-//        service.processMessages(MessageOrder.DESC, null, message1, message2, message3, message4, message5, message6);
+//        service.processMessages(MessageOrder.DESC, (Doubling) null, message1, message2, message3, message4, message5, message6);
 //        service.processMessages(MessageOrder.DESC, Doubling.DISTINCT, message1, null, message3, message4, message5, message6);
 
         System.out.println(message1);
