@@ -1,14 +1,17 @@
 package com.tcs.edu.domain;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Message {
-    private final Severity level;
-    private final String message;
+    Severity level;
+    String message;
+//    public UUID id;
 
     public Message(Severity level, String message) {
         this.level = level;
         this.message = message;
+//        this.id = id;
     }
 
     public Severity getLevel() {
@@ -18,6 +21,14 @@ public class Message {
     public String getMessage() {
         return message;
     }
+
+//    public UUID getId() {
+//        return id;
+//    }
+//
+//    public void setId(UUID id) {
+//        this.id=id;
+//    }
 
     @Override
     public String toString() {

@@ -1,9 +1,12 @@
 package com.tcs.edu.service;
 
 import com.tcs.edu.*;
+import com.tcs.edu.domain.DecoratedMessage;
 import com.tcs.edu.domain.Doubling;
 import com.tcs.edu.domain.Message;
 import com.tcs.edu.domain.MessageOrder;
+import com.tcs.edu.repository.HashMapMessageRepository;
+import com.tcs.edu.repository.MessageRepository;
 
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
@@ -20,12 +23,14 @@ import com.tcs.edu.domain.MessageOrder;
  */
 public class DecoratingMessageService extends ValidatingService implements MessageService {
 
-    private final Printer printer;
+//    private final Printer printer;
     private final MessageProcessor messageProcessor;
     private final MessageDecorator[] decorators;
+    private MessageRepository messageRepository = new HashMapMessageRepository();
 
-    public DecoratingMessageService(Printer printer, MessageProcessor messageProcessor, MessageDecorator... decorators) {
-        this.printer = printer;
+    public DecoratingMessageService(Printer printer, MessageRepository messageRepository, MessageProcessor messageProcessor, MessageDecorator... decorators) {
+//        this.printer = printer;
+        this.messageRepository = messageRepository;
         this.messageProcessor = messageProcessor;
         this.decorators = decorators;
         }
@@ -53,11 +58,27 @@ public class DecoratingMessageService extends ValidatingService implements Messa
                             processedMessage = decorator.decorate(processedMessage);
                         }
                     }
-                    printer.print(processedMessage);
+                    DecoratedMessage decoratedMessage = messageAssign(message, processedMessage);
+                    decoratedMessage.setId(messageRepository.create(decoratedMessage));
+
+//                    printer.print(processedMessage);
                 }
             } catch(IllegalArgumentException e) {
                 throw new ExceptionLogger("Argument is invalid!", e);
             }
+    }
+
+    public DecoratedMessage messageAssign (Message message, String processedMessage) {
+        DecoratedMessage decoratedBody = null;
+        decoratedBody.setLevel(message.getLevel());
+        decoratedBody.setMessage(processedMessage);
+        decoratedBody.setId(null);
+//        decoratedBody.setDecoratedBody(processedMessage);
+        return decoratedBody;
+    }
+
+    private void messageToDecoratedMessage (Message message, String processedMessage) {
+
     }
 
     /**

@@ -8,21 +8,24 @@ import com.tcs.edu.domain.Message;
 import com.tcs.edu.domain.MessageOrder;
 import com.tcs.edu.domain.Severity;
 import com.tcs.edu.printer.ConsolePrinter;
+import com.tcs.edu.repository.HashMapMessageRepository;
+import com.tcs.edu.repository.MessageRepository;
 import com.tcs.edu.service.DecoratingMessageService;
 import org.junit.Test;
 
 public class ApplicationTests {
 
-    Message message1 = new Message(Severity.MAJOR, "Hello world!");
-    Message message2 = new Message(Severity.MAJOR, "Hello world!");
-    Message message3 = new Message(Severity.REGULAR, "Ciao mondo!");
-    Message message4 = new Message(Severity.MINOR, null);
-    Message message5 = new Message(null, "¡Hola Mundo!");
-    Message message6 = new Message(Severity.MAJOR, "Hello world!");
-    Message message7 = new Message(Severity.MINOR, "");
+    Message message1 = new Message(Severity.MAJOR, "Hello world!", null);
+    Message message2 = new Message(Severity.MAJOR, "Hello world!", null);
+    Message message3 = new Message(Severity.REGULAR, "Ciao mondo!", null);
+    Message message4 = new Message(Severity.MINOR, null, null);
+    Message message5 = new Message(null, "¡Hola Mundo!", null);
+    Message message6 = new Message(Severity.MAJOR, "Hello world!", null);
+    Message message7 = new Message(Severity.MINOR, "", null);
 
     MessageService service = new DecoratingMessageService(
             new ConsolePrinter(),
+            new HashMapMessageRepository(),
             new OrderDoublingProcessor(),
             new TimestampMessageDecorator(),
             new PagingDecorator()
