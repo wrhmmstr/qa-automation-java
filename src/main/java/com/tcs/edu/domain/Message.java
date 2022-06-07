@@ -4,8 +4,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Message {
-    Severity level;
-    String message;
+    private final Severity level;
+    private final String message;
 //    public UUID id;
 
     public Message(Severity level, String message) {

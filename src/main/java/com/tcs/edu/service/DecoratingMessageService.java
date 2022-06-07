@@ -58,7 +58,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
                             processedMessage = decorator.decorate(processedMessage);
                         }
                     }
-                    DecoratedMessage decoratedMessage = messageAssign(message, processedMessage);
+                    DecoratedMessage decoratedMessage = new DecoratedMessage(message.getLevel(), processedMessage, null);
                     decoratedMessage.setId(messageRepository.create(decoratedMessage));
 
 //                    printer.print(processedMessage);
@@ -66,19 +66,6 @@ public class DecoratingMessageService extends ValidatingService implements Messa
             } catch(IllegalArgumentException e) {
                 throw new ExceptionLogger("Argument is invalid!", e);
             }
-    }
-
-    public DecoratedMessage messageAssign (Message message, String processedMessage) {
-        DecoratedMessage decoratedBody = null;
-        decoratedBody.setLevel(message.getLevel());
-        decoratedBody.setMessage(processedMessage);
-        decoratedBody.setId(null);
-//        decoratedBody.setDecoratedBody(processedMessage);
-        return decoratedBody;
-    }
-
-    private void messageToDecoratedMessage (Message message, String processedMessage) {
-
     }
 
     /**

@@ -23,21 +23,6 @@ public class DecoratedMessage extends Message{
         this.id=id;
     }
 
-    public void setLevel(Severity level){
-        this.level=level;
-    }
-
-    public void setMessage(String message){
-        this.message=message;
-    }
-
-//    public String getDecoratedBody(){
-//        return decoratedBody;
-//    }
-//    public void setDecoratedBody(String decoratedBody){
-//        this.decoratedBody = decoratedBody;
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
