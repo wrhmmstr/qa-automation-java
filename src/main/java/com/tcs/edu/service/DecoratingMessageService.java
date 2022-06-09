@@ -1,12 +1,14 @@
 package com.tcs.edu.service;
 
 import com.tcs.edu.*;
-import com.tcs.edu.domain.DecoratedMessage;
-import com.tcs.edu.domain.Doubling;
-import com.tcs.edu.domain.Message;
-import com.tcs.edu.domain.MessageOrder;
+import com.tcs.edu.domain.*;
 import com.tcs.edu.repository.HashMapMessageRepository;
 import com.tcs.edu.repository.MessageRepository;
+
+import java.util.Collection;
+import java.util.UUID;
+
+import static com.tcs.edu.domain.DecoratedMessage.NOT_FOUND;
 
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
@@ -42,30 +44,37 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      *
      * @param message Строка (String) с сообщением для декорирования
      * @see DecoratingMessageService Родительский класс
+     * @return
      */
-    public void processMessage(Message message) {
-            try {
-                if (super.isArgsValid(message)) {
-                    String processedMessage;
-                    if (super.isArgsValid(message.getLevel())) {
-                        processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
-                        for (MessageDecorator decorator : decorators) {
-                            processedMessage = decorator.decorate(processedMessage);
-                        }
-                    } else {
-                        processedMessage = message.getMessage();
-                        for (MessageDecorator decorator : decorators) {
-                            processedMessage = decorator.decorate(processedMessage);
-                        }
+    public UUID processMessage(Message message) {
+//        DecoratedMessage decoratedMessage = null;
+        try {
+            if (super.isArgsValid(message)) {
+                DecoratedMessage decoratedMessage = null;
+                String processedMessage;
+                if (super.isArgsValid(message.getLevel())) {
+                    processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
+                    for (MessageDecorator decorator : decorators) {
+                        processedMessage = decorator.decorate(processedMessage);
                     }
-                    DecoratedMessage decoratedMessage = new DecoratedMessage(message.getLevel(), processedMessage, null);
-                    decoratedMessage.setId(messageRepository.create(decoratedMessage));
+                } else {
+                    processedMessage = message.getMessage();
+                    for (MessageDecorator decorator : decorators) {
+                        processedMessage = decorator.decorate(processedMessage);
+                    }
+                }
+                decoratedMessage = new DecoratedMessage(message.getLevel(), processedMessage, null);
+                messageRepository.create(decoratedMessage);
 
 //                    printer.print(processedMessage);
-                }
-            } catch(IllegalArgumentException e) {
-                throw new ExceptionLogger("Argument is invalid!", e);
+                return decoratedMessage.getId();
             }
+        } catch (IllegalArgumentException e) {
+            throw new ExceptionLogger("Argument is invalid!", e);
+        }
+//        return decoratedMessage.getId();
+//        return DecoratedMessage.NOT_FOUND.getId();
+        return null;
     }
 
     /**
@@ -142,4 +151,21 @@ public class DecoratingMessageService extends ValidatingService implements Messa
             throw new ExceptionLogger("Argument is invalid!", e);
         }
     }
+
+    @Override
+    public DecoratedMessage findByPrimaryKey(UUID key) {
+        return messageRepository.findByPrimaryKey(key);
+    }
+
+    @Override
+    public Collection<DecoratedMessage> findAll() {
+        return messageRepository.findAll();
+    }
+
+    @Override
+    public Collection<DecoratedMessage> findBySeverity(Severity by) {
+        return messageRepository.findBySeverity(by);
+    }
+
+
 }

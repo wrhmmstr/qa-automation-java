@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.Objects;
 
 public class DecoratedMessage extends Message{
+    public static DecoratedMessage NOT_FOUND = new DecoratedMessage(null, "DecoratedMessage Not Found", null);
     public UUID id;
 
     public DecoratedMessage(Severity level, String message) {
