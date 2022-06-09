@@ -8,8 +8,6 @@ import com.tcs.edu.repository.MessageRepository;
 import java.util.Collection;
 import java.util.UUID;
 
-import static com.tcs.edu.domain.DecoratedMessage.NOT_FOUND;
-
 /**
  * Преобразование декорированного сообщения, уровня важности и разделителя в строку
  *
@@ -42,39 +40,26 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * и выводит полученную строку на печать.
      * Если сообщение пустое, то преобразование не происходит. Если уровень важности пустой, то не участвует в преобразовании.
      *
-     * @param message Строка (String) с сообщением для декорирования
-     * @see DecoratingMessageService Родительский класс
-     * @return
+     * @param message                   Строка (String) с сообщением для декорирования
+     * @see DecoratingMessageService    Родительский класс
+     * @return                          UUID сообщения в коллекции
      */
     public UUID processMessage(Message message) {
-//        DecoratedMessage decoratedMessage = null;
         try {
-            if (super.isArgsValid(message)) {
-                DecoratedMessage decoratedMessage = null;
-                String processedMessage;
-                if (super.isArgsValid(message.getLevel())) {
+            DecoratedMessage decoratedMessage;
+            String processedMessage;
+            super.isArgsValid(message);
                     processedMessage = String.format("%s %s", message.getMessage(), message.getLevel().getSeverity());
                     for (MessageDecorator decorator : decorators) {
                         processedMessage = decorator.decorate(processedMessage);
                     }
-                } else {
-                    processedMessage = message.getMessage();
-                    for (MessageDecorator decorator : decorators) {
-                        processedMessage = decorator.decorate(processedMessage);
-                    }
-                }
                 decoratedMessage = new DecoratedMessage(message.getLevel(), processedMessage, null);
                 messageRepository.create(decoratedMessage);
-
 //                    printer.print(processedMessage);
-                return decoratedMessage.getId();
-            }
+            return decoratedMessage.getId();
         } catch (IllegalArgumentException e) {
             throw new ExceptionLogger("Argument is invalid!", e);
         }
-//        return decoratedMessage.getId();
-//        return DecoratedMessage.NOT_FOUND.getId();
-        return null;
     }
 
     /**

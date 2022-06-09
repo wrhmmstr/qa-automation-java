@@ -8,8 +8,9 @@ import com.tcs.edu.domain.Severity;
 public abstract class ValidatingService {
     public boolean isArgsValid (Message message) {
         if (message == null) throw new IllegalArgumentException("Message message value is" + message.getMessage() + ".");
-        if (message.getMessage() == null) return false;
+        if (message.getMessage() == null) throw new IllegalArgumentException("Message message.getMessage() value is: " + message.getMessage() + ".");
         if (message.getMessage().isEmpty()) throw new IllegalArgumentException("Message message.getMessage() value is: " + message.getMessage() + ".");
+        if (message.getLevel() == null) throw new IllegalArgumentException("Message message.getLevel() value is: " + message.getLevel() + ".");
         return true;
     }
 
@@ -18,10 +19,10 @@ public abstract class ValidatingService {
         return true;
     }
 
-    public boolean isArgsValid (Severity level) {
-        if (level == null) return false;
-        return true;
-    }
+//    public boolean isArgsValid (Severity level) {
+//        if (level == null) throw new IllegalArgumentException("Message message.getLevel() value is: " + level + ".");;
+//        return true;
+//    }
 
     public boolean isArgsValid (MessageOrder order) {
         if (order == null) throw new IllegalArgumentException("MessageOrder order value is: " + order + ".");
