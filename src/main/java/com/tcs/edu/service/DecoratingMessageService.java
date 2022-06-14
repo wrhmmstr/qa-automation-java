@@ -28,7 +28,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
     private final MessageDecorator[] decorators;
     private MessageRepository messageRepository = new HashMapMessageRepository();
 
-    public DecoratingMessageService(Printer printer, MessageRepository messageRepository, MessageProcessor messageProcessor, MessageDecorator... decorators) {
+    public DecoratingMessageService(/*Printer printer, */MessageRepository messageRepository, MessageProcessor messageProcessor, MessageDecorator... decorators) {
 //        this.printer = printer;
         this.messageRepository = messageRepository;
         this.messageProcessor = messageProcessor;
@@ -70,6 +70,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @see DecoratingMessageService Родительский класс
      */
     public Message[] combineMessages(Message message, Message... messages) {
+        super.isArgsValid(message);
         Message[] combinedMessages = new Message[messages.length+1];
         int currentMessage = 0;
         combinedMessages[currentMessage] = message;
