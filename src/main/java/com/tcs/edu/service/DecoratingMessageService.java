@@ -44,7 +44,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @see DecoratingMessageService    Родительский класс
      * @return                          UUID сообщения в коллекции
      */
-    public UUID processMessage(Message message) {
+    public UUID processMessage(Message message) throws LogException {
         try {
             DecoratedMessage decoratedMessage;
             String processedMessage;
@@ -58,7 +58,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
 //                    printer.print(processedMessage);
             return decoratedMessage.getId();
         } catch (IllegalArgumentException e) {
-            throw new ExceptionLogger("Argument is invalid!", e);
+            throw new LogException("Argument is invalid!", e);
         }
     }
 
@@ -86,7 +86,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
      * @see DecoratingMessageService Родительский класс
      */
-    public void processMessagesCycle(Message... messages) {
+    public void processMessagesCycle(Message... messages) throws LogException {
         for (int currentMessage = 0; currentMessage < messages.length; currentMessage++) {
             processMessage(messages[currentMessage]);
         }
@@ -99,7 +99,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
      * @see DecoratingMessageService Родительский класс
      */
-    public void processMessages(Message message, Message... messages) {
+    public void processMessages(Message message, Message... messages) throws LogException {
         processMessagesCycle(combineMessages(message, messages));
     }
 
@@ -112,11 +112,11 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
      * @see DecoratingMessageService Родительский класс
      */
-    public void processMessages(MessageOrder order, Message message, Message... messages) {
+    public void processMessages(MessageOrder order, Message message, Message... messages) throws LogException {
         try {
             processMessagesCycle(messageProcessor.process(order, combineMessages(message, messages)));
         } catch(IllegalArgumentException e) {
-            throw new ExceptionLogger("Argument is invalid!", e);
+            throw new LogException("Argument is invalid!", e);
         }
     }
 
@@ -130,11 +130,11 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
      * @see DecoratingMessageService Родительский класс
      */
-    public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) {
+    public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) throws LogException {
         try {
             processMessagesCycle(messageProcessor.process(order, doubling, combineMessages(message, messages)));
         } catch(IllegalArgumentException e) {
-            throw new ExceptionLogger("Argument is invalid!", e);
+            throw new LogException("Argument is invalid!", e);
         }
     }
 
