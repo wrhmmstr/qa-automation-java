@@ -14,18 +14,19 @@ public class PagingDecorator extends ValidatingService implements MessageDecorat
     /**
      * Переменная с порядковым номером строки
      */
-    public static int messageCount = 0;
+    private static int messageCount = 0;
 
     /**
      * Переменная с количеством строк на одной странице
      */
     public int pageSize = 0;
 
-    public PagingDecorator(int pageSize) {
+    public PagingDecorator(int pageSize, int messageCount) {
         this.pageSize = pageSize;
+        this.messageCount = messageCount;
     }
     public PagingDecorator() {
-        this(2);
+        this(2, 0);
     }
 
     /**
