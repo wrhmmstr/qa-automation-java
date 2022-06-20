@@ -100,7 +100,11 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      * @see DecoratingMessageService Родительский класс
      */
     public void processMessages(Message message, Message... messages) throws LogException {
-        processMessagesCycle(combineMessages(message, messages));
+        try {
+            processMessagesCycle(combineMessages(message, messages));
+        } catch (IllegalArgumentException e) {
+            throw new LogException("Argument is invalid!", e);
+        }
     }
 
     /**
