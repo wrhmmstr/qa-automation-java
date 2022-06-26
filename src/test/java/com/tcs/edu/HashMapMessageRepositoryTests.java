@@ -18,7 +18,7 @@ public class HashMapMessageRepositoryTests {
     HashMapMessageRepository sut;
     DecoratedMessage currentMessage;
     UUID uuid;
-    Collection<DecoratedMessage> allMessages;
+    Iterable<DecoratedMessage> allMessages;
 
     @BeforeEach
     public void SetUp() {
@@ -41,7 +41,7 @@ public class HashMapMessageRepositoryTests {
 
             //When
             uuid = sut.create(message1);
-            System.out.println(uuid);
+//            System.out.println(uuid);
             //
 
             //Then
@@ -62,13 +62,13 @@ public class HashMapMessageRepositoryTests {
 
             //When
             currentMessage = sut.findByPrimaryKey(sut.create(message1));
-            System.out.println(currentMessage);
+//            System.out.println(currentMessage);
             //
 
             //Then
             assertThat(currentMessage).isNotNull()
                     .extracting("level", "message", "id")
-                    .contains(currentMessage.getLevel(), currentMessage.getMessage(), currentMessage.getId())
+                    .contains(message1.getLevel(), message1.getMessage())
                     .doesNotContainNull();
             //
         }
@@ -91,16 +91,15 @@ public class HashMapMessageRepositoryTests {
                 sut.create(currentMessage);
             }
             allMessages = sut.findAll();
-            for (DecoratedMessage currentMappedMessage : allMessages) {
-                currentMessage = currentMappedMessage;
-                System.out.println(currentMappedMessage);
-            }
+//            for (DecoratedMessage currentMappedMessage : allMessages) {
+//                currentMessage = currentMappedMessage;
+//                System.out.println(currentMappedMessage);
+//            }
             //
 
             //Then
-            assertThat(allMessages).isNotNull()
-                    .extracting("level", "message", "id")
-                    .contains(tuple(currentMessage.getLevel(), currentMessage.getMessage(), currentMessage.getId()))
+            assertThatIterable(allMessages).isNotNull()
+                    .contains(message1, message2)
                     .doesNotContainNull()
                     .hasSize(2);
             //
@@ -129,23 +128,18 @@ public class HashMapMessageRepositoryTests {
                 sut.create(currentMessage);
             }
             allMessages = sut.findBySeverity(severityFindBy);
-            for (DecoratedMessage currentMappedMessage : allMessages) {
-                currentMessage = currentMappedMessage;
-                System.out.println(currentMappedMessage);
-            }
+//            for (DecoratedMessage currentMappedMessage : allMessages) {
+//                currentMessage = currentMappedMessage;
+//                System.out.println(currentMappedMessage);
+//            }
             //
 
             //Then
-            assertThat(currentMessage).isNotNull()
-                    .extracting("level", "message", "id")
-                    .contains(currentMessage.getLevel(), currentMessage.getMessage(), currentMessage.getId())
-                    .doesNotContainNull();
-            assertThat(allMessages).isNotNull()
+            assertThatIterable(allMessages).isNotNull()
                     .doesNotContainNull()
-                    .extracting("level", "message", "id")
-                    .contains(tuple(currentMessage.getLevel(), currentMessage.getMessage(), currentMessage.getId()));
-            assertThat(allMessages).extracting("level")
-                    .isEqualTo(severityFindBy);
+                    .hasSize(3)
+                    .extracting("level")
+                    .containsAll(Collections.singleton(severityFindBy));
             //
         }
     }
