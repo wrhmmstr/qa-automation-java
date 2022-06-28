@@ -1128,7 +1128,7 @@ try {
 Цели
 ----
 - [ ] Установить [Docker](https://www.docker.com/products/docker-desktop/)
-- [ ] Собрать запускаемый docker-образ `tinkoff-edu-app:1.0.0` с [приложением](https://www.dropbox.com/s/g0er6zwnsycdrc5/app-dev.jar) при помощи [готового скрипта](app.codegen/Dockerfile) 
+- [ ] Собрать запускаемый docker-образ `tinkoff-edu-app:1.0.0` с [приложением](https://www.dropbox.com/s/g0er6zwnsycdrc5/app-dev.jar) при помощи [готового скрипта](Dockerfile) 
 
 Как проверить
 -------------
