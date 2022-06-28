@@ -1,7 +1,7 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.MessageDecorator;
-import com.tcs.edu.domain.Message;
+import com.tcs.edu.service.ValidatingService;
 
 import java.time.Instant;
 
@@ -12,7 +12,7 @@ import java.time.Instant;
  * @see     #decorate(String) Метод для добавления текущего времени к сообщению
  */
 
-public class TimestampMessageDecorator implements MessageDecorator {
+public class TimestampMessageDecorator extends ValidatingService implements MessageDecorator {
     /**
      * Переменная с количеством выведенных сообщений
      */
@@ -27,6 +27,7 @@ public class TimestampMessageDecorator implements MessageDecorator {
      */
     @Override
     public String decorate(String message){
+        super.isArgsValid(message);
         final var decoratedMessage = String.format("%s %s", Instant.now().toString(), message);
         return decoratedMessage;
     }
