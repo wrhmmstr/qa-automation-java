@@ -1,17 +1,18 @@
 package com.tcs.edu;
 
-import com.tcs.edu.decorator.OrderDoublingProcessor;
+import com.tcs.edu.decorator.DoublingProcessor;
+import com.tcs.edu.decorator.OrderProcessor;
 import com.tcs.edu.decorator.PagingDecorator;
 import com.tcs.edu.decorator.TimestampMessageDecorator;
 import com.tcs.edu.domain.*;
 import com.tcs.edu.repository.HashMapMessageRepository;
 import com.tcs.edu.service.DecoratingMessageService;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Nested;
+
+import java.util.Collection;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
-
-import java.util.*;
 
 @DisplayName("Decorating message service tests")
 public class DecoratingMessageServiceTests {
@@ -25,7 +26,8 @@ public class DecoratingMessageServiceTests {
     public void SetUp() {
         sut = new DecoratingMessageService(
                 new HashMapMessageRepository(),
-                new OrderDoublingProcessor(),
+                new OrderProcessor(),
+                new DoublingProcessor(new OrderProcessor()),
                 new TimestampMessageDecorator(),
                 new PagingDecorator());
 //        currentMessage = null;

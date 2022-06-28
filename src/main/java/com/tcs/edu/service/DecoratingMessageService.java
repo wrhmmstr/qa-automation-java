@@ -25,14 +25,16 @@ public class DecoratingMessageService extends ValidatingService implements Messa
 
 //    private final Printer printer;
     private final MessageCombiner messageCombiner = new MessageCombiner();
-    private final MessageProcessor messageProcessor;
+    private final MessageOrderProcessor messageOrderProcessor;
+    private final MessageDoublingProcessor messageDoublingProcessor;
     private final MessageDecorator[] decorators;
     private MessageRepository messageRepository = new HashMapMessageRepository();
 
-    public DecoratingMessageService(/*Printer printer, */MessageRepository messageRepository, MessageProcessor messageProcessor, MessageDecorator... decorators) {
+    public DecoratingMessageService(/*Printer printer, */MessageRepository messageRepository, MessageOrderProcessor messageOrderProcessor, MessageDoublingProcessor messageDoublingProcessor, MessageDecorator... decorators) {
 //        this.printer = printer;
         this.messageRepository = messageRepository;
-        this.messageProcessor = messageProcessor;
+        this.messageOrderProcessor = messageOrderProcessor;
+        this.messageDoublingProcessor = messageDoublingProcessor;
         this.decorators = decorators;
         }
 
@@ -101,7 +103,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      */
     public void processMessages(MessageOrder order, Message message, Message... messages) throws LogException {
         try {
-            processMessagesCycle(messageProcessor.process(order, messageCombiner.combineMessages(message, messages)));
+            processMessagesCycle(messageOrderProcessor.process(order, messageCombiner.combineMessages(message, messages)));
         } catch(IllegalArgumentException e) {
             throw new LogException("Argument is invalid!", e);
         }
@@ -119,7 +121,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      */
     public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) throws LogException {
         try {
-            processMessagesCycle(messageProcessor.process(order, doubling, messageCombiner.combineMessages(message, messages)));
+            processMessagesCycle(messageDoublingProcessor.process(order, doubling, messageCombiner.combineMessages(message, messages)));
         } catch(IllegalArgumentException e) {
             throw new LogException("Argument is invalid!", e);
         }
