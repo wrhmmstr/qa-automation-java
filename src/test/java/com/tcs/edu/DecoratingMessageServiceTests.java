@@ -28,9 +28,9 @@ public class DecoratingMessageServiceTests {
                 new OrderDoublingProcessor(),
                 new TimestampMessageDecorator(),
                 new PagingDecorator());
-        currentMessage = null;
-        uuid = null;
-        allMessages = null;
+//        currentMessage = null;
+//        uuid = null;
+//        allMessages = null;
     }
 
     @AfterEach

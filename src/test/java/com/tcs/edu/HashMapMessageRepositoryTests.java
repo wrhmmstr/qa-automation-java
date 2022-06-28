@@ -23,9 +23,9 @@ public class HashMapMessageRepositoryTests {
     @BeforeEach
     public void SetUp() {
         sut = new HashMapMessageRepository();
-        currentMessage = null;
-        uuid = null;
-        allMessages = null;
+//        currentMessage = null;
+//        uuid = null;
+//        allMessages = null;
     }
 
     @Nested
