@@ -58,29 +58,30 @@ public class ApiCountryTests {
         }
     }
 
-//    static Integer createCountry() throws SQLException {
-//        PreparedStatement sql = connection.prepareStatement(
-//                "insert into country as o (id, country_name) values (?::bigint, ?::varchar)"
-//                Statement.RETURN_GENERATED_KEYS);
-//        sql.setInt(1, Integer.valueOf(RandomStringUtils.randomNumeric(4)));
-//        sql.setString(2, RandomStringUtils.randomAlphabetic(2));
-//        sql.executeUpdate();
-//        ResultSet keys = sql.getGeneratedKeys();
-//        keys.next();
-//        int id = keys.getInt(1);
-//        countries.add(id);
-//        return id;
-//    }
-static Integer createCountry(String countryName) throws SQLException {
-        int countryId = Integer.parseInt(RandomStringUtils.randomNumeric(4));
-    PreparedStatement sql = connection.prepareStatement(
-            "insert into country as o (id, country_name) values (?::bigint, ?::varchar)");
-    sql.setInt(1, countryId);
-    sql.setString(2, countryName);
-    sql.executeUpdate();
-    countries.add(countryId);
-    return countryId;
-}
+    static Integer createCountry(String countryName) throws SQLException {
+        PreparedStatement sql = connection.prepareStatement(
+                "insert into country as o (id, country_name) values (?::bigint, ?::varchar)",
+//                "insert into country as o (country_name) values (?::varchar)",
+                Statement.RETURN_GENERATED_KEYS);
+        sql.setInt(1, Integer.valueOf(RandomStringUtils.randomNumeric(4)));
+        sql.setString(2, countryName);
+        sql.executeUpdate();
+        ResultSet keys = sql.getGeneratedKeys();
+        keys.next();
+        int id = keys.getInt(1);
+        countries.add(id);
+        return id;
+    }
+//static Integer createCountry(String countryName) throws SQLException {
+//        int countryId = Integer.parseInt(RandomStringUtils.randomNumeric(4));
+//    PreparedStatement sql = connection.prepareStatement(
+//            "insert into country as o (id, country_name) values (?::bigint, ?::varchar)");
+//    sql.setInt(1, countryId);
+//    sql.setString(2, countryName);
+//    sql.executeUpdate();
+//    countries.add(countryId);
+//    return countryId;
+//}
 
     private static void deleteTestCountriesFromDb(Collection<Integer> countries) throws SQLException {
         for (int id : countries) {
