@@ -1,6 +1,7 @@
 package com.tcs.edu.service;
 
 import com.tcs.edu.*;
+import com.tcs.edu.decorator.MessageCombiner;
 import com.tcs.edu.domain.*;
 import com.tcs.edu.repository.HashMapMessageRepository;
 import com.tcs.edu.repository.MessageRepository;
@@ -19,19 +20,21 @@ import java.util.UUID;
  * @see #processMessages(MessageOrder, Doubling, Message, Message...) Перегруженный метод для преобразования декорированных сообщений
  * по примеру processMessage, с возможностью обратной сортировки по последовательности vararg, и возможностью удаления дублей сообщения.
  * @see #processMessagesCycle(Message...) Метод преобразует декорированные сообщения из массива по примеру processMessage
- * @see #combineMessages(Message, Message...) Метод преобразует сообщение и варарг сообщений в единый массив
  */
 public class DecoratingMessageService extends ValidatingService implements MessageService {
 
 //    private final Printer printer;
-    private final MessageProcessor messageProcessor;
+    private final MessageCombiner messageCombiner = new MessageCombiner();
+    private final MessageOrderProcessor messageOrderProcessor;
+    private final MessageDoublingProcessor messageDoublingProcessor;
     private final MessageDecorator[] decorators;
     private MessageRepository messageRepository = new HashMapMessageRepository();
 
-    public DecoratingMessageService(/*Printer printer, */MessageRepository messageRepository, MessageProcessor messageProcessor, MessageDecorator... decorators) {
+    public DecoratingMessageService(/*Printer printer, */MessageRepository messageRepository, MessageOrderProcessor messageOrderProcessor, MessageDoublingProcessor messageDoublingProcessor, MessageDecorator... decorators) {
 //        this.printer = printer;
         this.messageRepository = messageRepository;
-        this.messageProcessor = messageProcessor;
+        this.messageOrderProcessor = messageOrderProcessor;
+        this.messageDoublingProcessor = messageDoublingProcessor;
         this.decorators = decorators;
         }
 
@@ -63,24 +66,6 @@ public class DecoratingMessageService extends ValidatingService implements Messa
     }
 
     /**
-     * Метод комбинирует сообщение и массив сообщений в единый массив
-     *
-     * @param message   Строка (String) с сообщением для декорирования
-     * @param messages  Массив строк (String...) с сообщениями для декорирования
-     * @see DecoratingMessageService Родительский класс
-     */
-    public Message[] combineMessages(Message message, Message... messages) {
-        super.isArgsValid(message);
-        Message[] combinedMessages = new Message[messages.length+1];
-        int currentMessage = 0;
-        combinedMessages[currentMessage] = message;
-        for (currentMessage = 1; currentMessage < combinedMessages.length; currentMessage++) {
-            combinedMessages[currentMessage] = messages[currentMessage-1];
-        }
-        return combinedMessages;
-    }
-
-    /**
      * Метод преобразует декорированные сообщения из массива по примеру processMessage
      *
      * @param messages Массив строк (String varargs) с сообщениями для декорирования
@@ -101,7 +86,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      */
     public void processMessages(Message message, Message... messages) throws LogException {
         try {
-            processMessagesCycle(combineMessages(message, messages));
+            processMessagesCycle(messageCombiner.combineMessages(message, messages));
         } catch (IllegalArgumentException e) {
             throw new LogException("Argument is invalid!", e);
         }
@@ -118,7 +103,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      */
     public void processMessages(MessageOrder order, Message message, Message... messages) throws LogException {
         try {
-            processMessagesCycle(messageProcessor.process(order, combineMessages(message, messages)));
+            processMessagesCycle(messageOrderProcessor.process(order, messageCombiner.combineMessages(message, messages)));
         } catch(IllegalArgumentException e) {
             throw new LogException("Argument is invalid!", e);
         }
@@ -136,7 +121,7 @@ public class DecoratingMessageService extends ValidatingService implements Messa
      */
     public void processMessages(MessageOrder order, Doubling doubling, Message message, Message... messages) throws LogException {
         try {
-            processMessagesCycle(messageProcessor.process(order, doubling, combineMessages(message, messages)));
+            processMessagesCycle(messageDoublingProcessor.process(order, doubling, messageCombiner.combineMessages(message, messages)));
         } catch(IllegalArgumentException e) {
             throw new LogException("Argument is invalid!", e);
         }
